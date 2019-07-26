@@ -11,10 +11,6 @@ public class TetrisBlock extends Sprite implements Animate {
 	 * collision information to propagate across the entire tetromino */
 	private TetrisBlock next; 
 	private TetrisBlock prev; 
-	private TetrisBlock upBlock; 
-	private TetrisBlock downBlock; 
-	private TetrisBlock leftBlock; 
-	private TetrisBlock rightBlock; 
 	private JTGrid jtg;
 	private Vector2i position;
 	private Vector2i prevPosition;
@@ -30,9 +26,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		setPrev(null);
 		this.jtg = jtg;
 		this.position = position;
-		try {
-		resetAdjacents();
-		}catch(OutOfGridException e) {}
 	}
 	
 	public TetrisBlock(String img, JTGrid jtg) {
@@ -43,12 +36,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		setPrev(null);
 		this.jtg = jtg;
 		
-	}
-	private void resetAdjacents() throws OutOfGridException {
-			upBlock = jtg.getRelativeToBlock(this, Direction.UP);
-			downBlock = jtg.getRelativeToBlock(this, Direction.DOWN);
-			leftBlock = jtg.getRelativeToBlock(this, Direction.LEFT);
-			rightBlock = jtg.getRelativeToBlock(this, Direction.RIGHT);
 	}
 	public void moveUp() { //Used for wallKick() and to satisfy Animate
 		if(!topHit) {
@@ -61,20 +48,9 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	@Override
 	public void moveDown() {
-		
-		if(downBlock != null) {
-			bottomHit();
-			return;
-		}
-			
 			try {
 				jtg.updateBlock(this, Direction.DOWN);
-				resetAdjacents();
-			} catch(NullBlockException e){} 
-		      catch (OutOfGridException e) {}
-			
-		
-		
+			} catch(NullBlockException e){} 	
 	}
 	@Override
 	public void moveRight() {
