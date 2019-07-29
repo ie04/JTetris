@@ -20,7 +20,6 @@ public class JTGrid {
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
 	}
 	private void queryCollision(TetrisBlock block) {
-		
 	}
 	private boolean doesVectorExceedBounds(Vector2i vec) {
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.x < MIN_XY)

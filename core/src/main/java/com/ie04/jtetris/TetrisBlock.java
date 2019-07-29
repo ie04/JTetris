@@ -170,8 +170,7 @@ public class TetrisBlock extends Sprite implements Animate {
 					
 				}
 		}else {
-			if(rightHit) {
-				
+			if(rightHit) {	
 				rightHit = false;
 					
 				if(next != null)
