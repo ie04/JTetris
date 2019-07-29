@@ -76,64 +76,113 @@ public class TetrisBlock extends Sprite implements Animate {
 			}
 		
 	}
-	public void topHit() {
-		if(!topHit) {
+	public void topHit(boolean is) {
+		if(is) {
+			if(!topHit) {
+				topHit = true;
+				
+				if(next != null)
+					next.topHit(true);
+				
+				if(prev != null)
+					prev.topHit(true);
+			}
 			
-			topHit = true;
-			
-			if(next != null)
-				next.topHit();
-			
-			if(prev != null)
-				prev.topHit();
-			
+		}else {
+			if(topHit) {
+				topHit = false;
+				
+				if(next != null)
+					next.topHit(false);
+				
+				if(prev != null)
+					prev.topHit(false);
+			}
 		}
+			
 	}
 	
-	public void bottomHit() {
-		
-		if(!groundHit) {
+	public void bottomHit(boolean is) {
+		if(is) {
+			if(!groundHit) {
+				
+				groundHit = true;
+				
+				if(next != null)
+					next.bottomHit(true);
+				
+				if(prev != null)
+					prev.bottomHit(true);	
+			}
+		}else {
+			if(groundHit) {
+				
+				groundHit = false;
 			
-			groundHit = true;
+				if(next != null)
+					next.bottomHit(false);
 			
-			if(next != null)
-				next.bottomHit();
+				if(prev != null)
+					prev.bottomHit(false);
 			
-			if(prev != null)
-				prev.bottomHit();
-			
-			
+			}
 		}
 		
-		
 	}
-	public void leftHit(){
-		if(!leftHit) {
+	public void leftHit(boolean is){
+		if(is) {
+			if(!leftHit) {
+						
+				leftHit = true;
+						
+				if(next != null)
+					next.leftHit(true);
+						
+				if(prev != null)
+					prev.leftHit(true);
+						
+						
+			}
+		}else {
+			if(leftHit) {
+				leftHit = false;
+				
+				if(next != null)
+					next.leftHit(true);
+						
+				if(prev != null)
+					prev.leftHit(true);
+			}
+		}
+	}
+	public void rightHit(boolean is) {
+		if(is) {
+			if(!rightHit) {
 					
-					leftHit = true;
+				rightHit = true;
 					
-					if(next != null)
-						next.leftHit();
+				if(next != null)
+					next.rightHit(true);
 					
-					if(prev != null)
-						prev.leftHit();
+				if(prev != null)
+					prev.rightHit(true);
 					
 					
 				}
-	}
-	public void rightHit() {
-		if(!rightHit) {
+		}else {
+			if(rightHit) {
+				
+				rightHit = false;
 					
-					rightHit = true;
+				if(next != null)
+					next.rightHit(false);
 					
-					if(next != null)
-						next.rightHit();
-					
-					if(prev != null)
-						prev.rightHit();
+				if(prev != null)
+					prev.rightHit(false);
 					
 					
 				}
+		}
 	}
 	public TetrisBlock getNext() {
 		return next;

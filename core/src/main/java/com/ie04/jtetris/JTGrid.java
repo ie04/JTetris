@@ -19,6 +19,9 @@ public class JTGrid {
 	JTGrid(){
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
 	}
+	private void queryCollision(TetrisBlock block) {
+		
+	}
 	private boolean doesVectorExceedBounds(Vector2i vec) {
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.x < MIN_XY)
 			return true;
@@ -105,8 +108,6 @@ public class JTGrid {
 			if(block.getPrevPosition().y > MIN_XY) {
 				newPosition = new Vector2i(block.getPrevPosition().x, block.getPosition().y - 1);
 				updateBlock(block, newPosition);
-			} else {
-				block.topHit();
 			}
 			break;
 		case DOWN:
@@ -114,24 +115,18 @@ public class JTGrid {
 				newPosition = new Vector2i(block.getPrevPosition().x, block.getPrevPosition().y + 1);
 				updateBlock(block, newPosition);
 				
-			} else {
-				block.bottomHit();
 			}
 			break;
 		case LEFT:	
 			if(block.getPrevPosition().x > MIN_XY) {
 				newPosition = new Vector2i(block.getPrevPosition().x - 1, block.getPrevPosition().y);
 				updateBlock(block, newPosition);			
-			} else {
-				block.leftHit();
 			}
 			break;
 		case RIGHT:
 			if(block.getPrevPosition().x < MAX_X) {
 				newPosition = new Vector2i(block.getPrevPosition().x + 1, block.getPrevPosition().y);
 				updateBlock(block, newPosition);	
-			} else {
-				block.rightHit();
 			}
 			break;
 		
@@ -140,23 +135,17 @@ public class JTGrid {
 	
 	public void updateBlock(TetrisBlock block, Vector2i newPosition) throws NullBlockException { //Safely moves TetrisBlock while deleting previous position
 		
-		if(block.getPosition() == null) {
+		if(block == null)
 			throw new NullBlockException();
-		}
-			
-		
-		
-		block.setPrevPosition(block.getPosition());
-		block.setPosition(newPosition);
 		
 		try {
-			deleteAtVector(block.getPrevPosition());
-		} catch (OutOfGridException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
+			if(isBlockAtVector(newPosition)) {
+				block.setPrevPosition(block.getPosition());
+				block.setPosition(newPosition);
+				deleteAtVector(block.getPrevPosition());
+			}	
+		}catch(OutOfGridException e) { e.printStackTrace(); }
+	}	
 	public int testLineComplete() {
 		int pointsAwarded = 0;
 		int blocksInLine = 0;
@@ -170,7 +159,7 @@ public class JTGrid {
 					blocksInLine++;
 			}
 			if(blocksInLine == MAX_Y) { //If line is filled
-				cleaveLine(i); //Delete said line
+				cleaveLine(i);
 				pointsAwarded++;
 				blocksInLine = 0; 
 			}
@@ -178,7 +167,7 @@ public class JTGrid {
 		}
 		return pointsAwarded;
 	}
-	public void cleaveLine(int line) {
+	public void cleaveLine(int line) { //Deletes selected line
 		if(line > MAX_Y)
 			return;
 		
