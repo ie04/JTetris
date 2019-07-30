@@ -20,6 +20,24 @@ public class JTGrid {
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
 	}
 	private void queryCollision(TetrisBlock block) {
+		
+		if(isBlockAdjacent(block, Direction.DOWN))
+			block.bottomHit(true);
+		else
+			block.bottomHit(false);
+		
+		if(isBlockAdjacent(block, Direction.LEFT))
+			block.leftHit(true);
+		else
+			block.leftHit(false);
+		
+		if(isBlockAdjacent(block, Direction.RIGHT))
+			block.rightHit(true);
+		else
+			block.rightHit(false);
+		
+			
+		
 	}
 	private boolean doesVectorExceedBounds(Vector2i vec) {
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.x < MIN_XY)
@@ -52,6 +70,34 @@ public class JTGrid {
 		case RIGHT: return getRelativeToBlock(block, 1, 0);
 		default: return block;
 		}
+	}
+	public boolean isBlockAdjacent(TetrisBlock block, Direction direction) {
+		switch(direction) {
+		case DOWN:
+			try {
+				if(getRelativeToBlock(block, Direction.DOWN) == null) return true; else return false;
+			} catch (OutOfGridException e) { e.printStackTrace(); }
+			break;
+		case LEFT:
+			try {
+				if(getRelativeToBlock(block, Direction.LEFT) == null) return true; else return false;
+			} catch (OutOfGridException e) { e.printStackTrace(); }
+			break;
+		case RIGHT:
+			try {
+				if(getRelativeToBlock(block, Direction.RIGHT) == null) return true; else return false;
+			} catch (OutOfGridException e) { e.printStackTrace(); }
+			break;
+		case UP:
+			try {
+				if(getRelativeToBlock(block, Direction.UP) == null) return true; else return false;
+			} catch (OutOfGridException e) { e.printStackTrace(); }
+			break;
+		default:
+			break;
+		
+		}
+		return false;
 	}
 	private void deleteAtVector(Vector2i vec) throws OutOfGridException {
 		
@@ -136,6 +182,8 @@ public class JTGrid {
 		
 		if(block == null)
 			throw new NullBlockException();
+		
+		queryCollision(block);
 		
 		try {
 			if(isBlockAtVector(newPosition)) {

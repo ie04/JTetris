@@ -15,7 +15,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	private Vector2i position;
 	private Vector2i prevPosition;
 	private boolean topHit = false;
-	private boolean groundHit = false;
+	private boolean bottomHit = false;
 	private boolean leftHit = false;
 	private boolean rightHit = false;
 	
@@ -48,14 +48,16 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	@Override
 	public void moveDown() {
+		if(!bottomHit) {
 			try {
 				jtg.updateBlock(this, Direction.DOWN);
 			} catch(NullBlockException e){} 	
+		}
 	}
 	@Override
 	public void moveRight() {
 
-		if(!rightHit && !groundHit) {
+		if(!rightHit && !bottomHit) {
 			try {
 				jtg.updateBlock(this, Direction.RIGHT);
 			} catch (NullBlockException e) {}
@@ -65,9 +67,8 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	@Override
 	public void moveLeft() {
-
-		
-		if(!leftHit && !groundHit) {
+	
+		if(!leftHit && !bottomHit) {
 			try {
 				jtg.updateBlock(this, Direction.LEFT);
 			} catch (NullBlockException e) {}
@@ -104,9 +105,9 @@ public class TetrisBlock extends Sprite implements Animate {
 	
 	public void bottomHit(boolean is) {
 		if(is) {
-			if(!groundHit) {
+			if(!bottomHit) {
 				
-				groundHit = true;
+				bottomHit = true;
 				
 				if(next != null)
 					next.bottomHit(true);
@@ -115,9 +116,9 @@ public class TetrisBlock extends Sprite implements Animate {
 					prev.bottomHit(true);	
 			}
 		}else {
-			if(groundHit) {
+			if(bottomHit) {
 				
-				groundHit = false;
+				bottomHit = false;
 			
 				if(next != null)
 					next.bottomHit(false);
@@ -205,7 +206,7 @@ public class TetrisBlock extends Sprite implements Animate {
 		this.position = new Vector2i(x, y);
 	}
 	public boolean isGroundHit() {
-		return groundHit;
+		return bottomHit;
 	}
 	public Vector2i getPrevPosition() {
 		return prevPosition;

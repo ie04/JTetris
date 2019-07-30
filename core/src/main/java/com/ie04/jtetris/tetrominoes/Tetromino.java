@@ -72,6 +72,7 @@ public abstract class Tetromino implements Animate {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void wallKick() { //Moves tetromino during rotation if it is near a boundary
 
 			
