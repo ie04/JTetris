@@ -6,6 +6,7 @@ package com.ie04.jtetris.tetrominoes;
 
 import com.ie04.jtetris.JTGrid;
 import com.ie04.jtetris.NullBlockException;
+import com.ie04.jtetris.OutOfGridException;
 import com.ie04.jtetris.Vector2i;
 
 public class ZTetromino extends Tetromino {
@@ -27,23 +28,19 @@ public class ZTetromino extends Tetromino {
 	}
 
 	@Override
-	public void rotate() {
-		if(groundHit)
+	public void rotate() throws NullBlockException, OutOfGridException {
+		if(bottomHit)
 			return;
 		
 		if(currentState == 0) {
-			try {
 			jtg.updateBlock(blockArray[2], new Vector2i(blockArray[3].getPosition().x, blockArray[3].getPosition().y - 1));
 			jtg.updateBlock(blockArray[0], new Vector2i(blockArray[3].getPosition().x - 1, blockArray[3].getPosition().y));
 			jtg.updateBlock(blockArray[1], new Vector2i(blockArray[0].getPosition().x, blockArray[0].getPosition().y + 1));
-			} catch(NullBlockException e) { e.printStackTrace(); }
 			currentState = 1;
 		}else if(currentState == 1) {
-			try {
 			jtg.updateBlock(blockArray[2], new Vector2i(blockArray[3].getPosition().x + 1, blockArray[3].getPosition().y));
 			jtg.updateBlock(blockArray[0], new Vector2i(blockArray[3].getPosition().x, blockArray[3].getPosition().y - 1));
 			jtg.updateBlock(blockArray[1], new Vector2i(blockArray[0].getPosition().x - 1, blockArray[0].getPosition().y));
-			} catch(NullBlockException e) { e.printStackTrace(); }
 			currentState = 0;
 		
 		}
