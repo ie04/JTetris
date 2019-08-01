@@ -8,9 +8,10 @@ import org.mini2Dx.core.graphics.Graphics;
 
 public class JTGrid {
 	
-	public static final float LEFT_EXTREME = 21; //In pixels
+	public static final float LEFT_EXTREME = 21; //Border contains extra pixel
 	public static final float RIGHT_EXTREME = 121;
 	public static final float TOP_EXTREME = 21;
+	public static final float BLOCK_WIDTH = 20; //Block width in pixels
 	public static final float MAX_Y = 17; //Excludes 0
 	public static final float MAX_X = 7;
 	public static final float MIN_XY = 0; //Both 0
@@ -19,28 +20,9 @@ public class JTGrid {
 	JTGrid(){
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
 	}
-	private void queryCollision(TetrisBlock block) {
-		
-		if(isBlockAdjacent(block, Direction.DOWN))
-			block.bottomHit(true);
-		else
-			block.bottomHit(false);
-		
-		if(isBlockAdjacent(block, Direction.LEFT))
-			block.leftHit(true);
-		else
-			block.leftHit(false);
-		
-		if(isBlockAdjacent(block, Direction.RIGHT))
-			block.rightHit(true);
-		else
-			block.rightHit(false);
-		
-			
-		
-	}
+
 	private boolean doesVectorExceedBounds(Vector2i vec) {
-		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.x < MIN_XY)
+		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.y < MIN_XY)
 			return true;
 		else
 			return false;
@@ -54,12 +36,16 @@ public class JTGrid {
 	public TetrisBlock getAtVector(Vector2i vec) throws OutOfGridException {
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();
+		
 		return tetGrid[vec.y][vec.x];
 	}
 	public TetrisBlock getAtVector(int x, int y) throws OutOfGridException {
 		return getAtVector(new Vector2i(x, y));
 	}
 	public TetrisBlock getRelativeToBlock(TetrisBlock block, int xOffset, int yOffset) throws OutOfGridException {
+		if( block.getPosition().x + xOffset < 0 || block.getPosition().y + yOffset < 0)
+			return block; //If offset is greater than bounds, return itself
+		
 		return getAtVector(block.getPosition().x + xOffset, block.getPosition().y + yOffset);
 	}
 	public TetrisBlock getRelativeToBlock(TetrisBlock block, Direction direction) throws OutOfGridException {
@@ -71,28 +57,16 @@ public class JTGrid {
 		default: return block;
 		}
 	}
-	public boolean isBlockAdjacent(TetrisBlock block, Direction direction) {
+	public boolean isForeignBlockAdjacent(TetrisBlock block, Direction direction) throws OutOfGridException {
 		switch(direction) {
 		case DOWN:
-			try {
-				if(getRelativeToBlock(block, Direction.DOWN) == null) return true; else return false;
-			} catch (OutOfGridException e) { e.printStackTrace(); }
-			break;
+			if(block.isBlockForeign(getRelativeToBlock(block, Direction.DOWN))) return true; else return false;
 		case LEFT:
-			try {
-				if(getRelativeToBlock(block, Direction.LEFT) == null) return true; else return false;
-			} catch (OutOfGridException e) { e.printStackTrace(); }
-			break;
+			if(block.isBlockForeign(getRelativeToBlock(block, Direction.LEFT))) return true; else return false;
 		case RIGHT:
-			try {
-				if(getRelativeToBlock(block, Direction.RIGHT) == null) return true; else return false;
-			} catch (OutOfGridException e) { e.printStackTrace(); }
-			break;
+			if(block.isBlockForeign(getRelativeToBlock(block, Direction.RIGHT))) return true; else return false;
 		case UP:
-			try {
-				if(getRelativeToBlock(block, Direction.UP) == null) return true; else return false;
-			} catch (OutOfGridException e) { e.printStackTrace(); }
-			break;
+			if(block.isBlockForeign(getRelativeToBlock(block, Direction.UP))) return true; else return false;
 		default:
 			break;
 		
@@ -129,8 +103,8 @@ public class JTGrid {
 		
 		block.setPosition(gridPos);
 		setAtVector(gridPos, block);
-		g.drawSprite(block, JTGrid.TOP_EXTREME + (gridPos.x * 20), 
-							JTGrid.TOP_EXTREME + (gridPos.y * 20) );
+		g.drawSprite(block, JTGrid.TOP_EXTREME + (gridPos.x * BLOCK_WIDTH), 
+							JTGrid.TOP_EXTREME + (gridPos.y * BLOCK_WIDTH));
 		
 		
 	}
@@ -138,11 +112,10 @@ public class JTGrid {
 	public void addBlockToGrid(TetrisBlock block, Graphics g) throws OutOfGridException {	
 		addBlockToGrid(block, block.getPosition(), g);
 	}
-	public void updateBlock(TetrisBlock block, Direction direction) throws NullBlockException { 
+	public void updateBlock(TetrisBlock block, Direction direction) throws NullBlockException, OutOfGridException{ 
 		
 		if(block.getPosition() == null)
 			throw new NullBlockException();	
-		
 		
 		
 		block.setPrevPosition(block.getPosition());
@@ -153,6 +126,8 @@ public class JTGrid {
 			if(block.getPrevPosition().y > MIN_XY) {
 				newPosition = new Vector2i(block.getPrevPosition().x, block.getPosition().y - 1);
 				updateBlock(block, newPosition);
+			}else {
+				block.topHit(true);
 			}
 			break;
 		case DOWN:
@@ -160,40 +135,50 @@ public class JTGrid {
 				newPosition = new Vector2i(block.getPrevPosition().x, block.getPrevPosition().y + 1);
 				updateBlock(block, newPosition);
 				
+			}else {
+				block.bottomHit(true);
 			}
+				
 			break;
 		case LEFT:	
 			if(block.getPrevPosition().x > MIN_XY) {
 				newPosition = new Vector2i(block.getPrevPosition().x - 1, block.getPrevPosition().y);
 				updateBlock(block, newPosition);			
+			}else {
+				block.leftHit(true);
 			}
+				
 			break;
 		case RIGHT:
 			if(block.getPrevPosition().x < MAX_X) {
 				newPosition = new Vector2i(block.getPrevPosition().x + 1, block.getPrevPosition().y);
 				updateBlock(block, newPosition);	
+			}else {
+				block.rightHit(true);
 			}
 			break;
 		
 		}
 	}
 	
-	public void updateBlock(TetrisBlock block, Vector2i newPosition) throws NullBlockException { //Safely moves TetrisBlock while deleting previous position
+	public void updateBlock(TetrisBlock block, Vector2i newPosition) throws NullBlockException, OutOfGridException { //Safely moves TetrisBlock while deleting previous position
 		
 		if(block == null)
-			throw new NullBlockException();
+				throw new NullBlockException();
+			
+
+		if(isBlockAtVector(newPosition))
+			return;
 		
-		queryCollision(block);
+			block.setPrevPosition(block.getPosition());
+			block.setPosition(newPosition);
+			deleteAtVector(block.getPrevPosition());
 		
-		try {
-			if(isBlockAtVector(newPosition)) {
-				block.setPrevPosition(block.getPosition());
-				block.setPosition(newPosition);
-				deleteAtVector(block.getPrevPosition());
-			}	
-		}catch(OutOfGridException e) { e.printStackTrace(); }
+			
+				
+			
 	}	
-	public int testLineComplete() {
+	public int testLineComplete() throws OutOfGridException {
 		int pointsAwarded = 0;
 		int blocksInLine = 0;
 		for(int i = 0; i < MAX_Y; i++) {
@@ -214,16 +199,12 @@ public class JTGrid {
 		}
 		return pointsAwarded;
 	}
-	public void cleaveLine(int line) { //Deletes selected line
+	public void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
 		if(line > MAX_Y)
 			return;
 		
 		for(int i = 0; i < MAX_X; i++) {
-			try {
-				deleteAtVector(line, i);
-			} catch (OutOfGridException e) {
-				e.printStackTrace();
-			}
+			deleteAtVector(line, i);
 		}
 		
 	}

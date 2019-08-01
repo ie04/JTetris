@@ -10,11 +10,13 @@ import com.ie04.jtetris.OutOfGridException;
 import com.ie04.jtetris.TetrisBlock;
 
 public abstract class Tetromino implements Animate {
+	protected static int numTetrominoes;
+	public int tetID;
 	protected JTGrid jtg;
 	protected TetrisBlock[] blockArray; 
 	protected int currentState = 0;
 	protected boolean topHit; //Used to determine loss
-	protected boolean groundHit;
+	protected boolean bottomHit;
 	protected boolean leftHit;
 	protected boolean rightHit;
 	
@@ -22,7 +24,7 @@ public abstract class Tetromino implements Animate {
 		blockArray = new TetrisBlock[4]; //All tetrominoes have 4 blocks
 		
 		for(int i = 0; i < blockArray.length; i++) { //Initializing blocks...
-			blockArray[i] = new TetrisBlock(img, jtg);
+			blockArray[i] = new TetrisBlock(img, jtg, this);
 		}
 		for(int i = 0; i < blockArray.length; i++) { //Creating linked list of TetrisBlocks
 			
@@ -40,11 +42,12 @@ public abstract class Tetromino implements Animate {
 			
 		}
 		this.jtg = jtg;
+		tetID = numTetrominoes;
+		numTetrominoes++;
 		construct(); //Constructs tetromino shape
 	}
 	protected abstract void construct();	
-	public abstract void rotate();
-	
+	public abstract void rotate() throws NullBlockException, OutOfGridException;
 	public void render(Graphics g) {
 		
 			for(int i = 0; i < blockArray.length; i++) {
@@ -65,10 +68,8 @@ public abstract class Tetromino implements Animate {
 		for(int i = 0; i < blockArray.length; i++) {
 			try {
 				jtg.updateBlock(blockArray[i], direction);
-			} catch (NullBlockException e) {
-				System.out.println("Error: Block Doesn't exist");
-				e.printStackTrace();
-			}
+			} catch (NullBlockException e) { e.printStackTrace();} 
+			  catch (OutOfGridException e) { e.printStackTrace();} 
 		}
 	}
 
@@ -119,13 +120,13 @@ public abstract class Tetromino implements Animate {
 	 * @return the groundHit
 	 */
 	public boolean isGroundHit() {
-		return groundHit;
+		return bottomHit;
 	}
 	/**
 	 * @param groundHit the groundHit to set
 	 */
-	public void setGroundHit(boolean groundHit) {
-		this.groundHit = groundHit;
+	public void setBottomHit(boolean bottomHit) {
+		this.bottomHit = bottomHit;
 	}
 	/**
 	 * @return the leftHit
