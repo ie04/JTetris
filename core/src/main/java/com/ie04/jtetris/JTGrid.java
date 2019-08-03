@@ -8,6 +8,7 @@ import org.mini2Dx.core.graphics.Graphics;
 
 public class JTGrid {
 	
+
 	public static final float LEFT_EXTREME = 21; //White border contains extra pixel
 	public static final float RIGHT_EXTREME = 121;
 	public static final float TOP_EXTREME = 21;
@@ -20,6 +21,7 @@ public class JTGrid {
 	JTGrid(){
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
 	}
+
 	public boolean queryCollision(TetrisBlock block, Direction direction) throws OutOfGridException {
 		switch(direction) {
 		case DOWN:
@@ -36,6 +38,8 @@ public class JTGrid {
 		}
 		
 	}
+
+
 	private boolean doesVectorExceedBounds(Vector2i vec) {
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.y < MIN_XY)
 			return true;
@@ -135,7 +139,9 @@ public class JTGrid {
 		if(block == null)
 			throw new NullBlockException();	
 		
+
 		Vector2i prevPosition = block.getPosition();
+
 		Vector2i newPosition;
 		
 		switch(direction) {
@@ -143,6 +149,8 @@ public class JTGrid {
 			if(prevPosition.y > MIN_XY) {
 				newPosition = new Vector2i(prevPosition.x, block.getPosition().y - 1);
 				updateBlock(block, newPosition);
+			}else {
+				block.topHit(true);
 			}
 			break;
 		case DOWN:
@@ -150,6 +158,8 @@ public class JTGrid {
 				newPosition = new Vector2i(prevPosition.x, prevPosition.y + 1);
 				updateBlock(block, newPosition);
 				
+			}else {
+				block.bottomHit(true);
 			}
 				
 			break;
@@ -157,6 +167,8 @@ public class JTGrid {
 			if(prevPosition.x > MIN_XY) {
 				newPosition = new Vector2i(prevPosition.x - 1, prevPosition.y);
 				updateBlock(block, newPosition);			
+			}else {
+				block.leftHit(true);
 			}
 				
 			break;
@@ -164,20 +176,31 @@ public class JTGrid {
 			if(prevPosition.x < MAX_X) {
 				newPosition = new Vector2i(prevPosition.x + 1, prevPosition.y);
 				updateBlock(block, newPosition);	
+			}else {
+				block.rightHit(true);
 			}
 			break;
 		
 		}
 	}
 	
+
 	public void updateBlock(TetrisBlock block, Vector2i newPosition) throws OutOfGridException, NullBlockException { //Safely moves TetrisBlock while deleting previous position
+ //Safely moves TetrisBlock while deleting previous position
+
 		
 		if(block == null)
-			throw new NullBlockException();
+				throw new NullBlockException();
+			
+
+		if(isBlockAtVector(newPosition))
+			return;
 		
+
 		deleteAtVector(block.getPosition());
 		block.setPosition(newPosition);
 		setAtVector(block);
+
 		
 			
 				
@@ -209,7 +232,7 @@ public class JTGrid {
 			return;
 		
 		for(int i = 0; i < MAX_X; i++) {
-			getAtVector(line, i).getPrev().setNext(getAtVector(line, i).getNext()); //Relinks linked list
+
 			deleteAtVector(line, i);
 		}
 		
