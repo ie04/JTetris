@@ -25,7 +25,7 @@ public class JTGrid {
 	public boolean queryCollision(TetrisBlock block, Direction direction) throws OutOfGridException {
 		switch(direction) {
 		case DOWN:
-			if(block.getPosition().y == MAX_Y || isForeignBlockAdjacent(block, Direction.DOWN)) return true; else return false;
+			if(block.getPosition().y == MAX_Y  || isForeignBlockAdjacent(block, Direction.DOWN)) return true; else return false;
 		case LEFT:
 			if(block.getPosition().x == MIN_XY || isForeignBlockAdjacent(block, Direction.LEFT)) return true; else return false;
 		case RIGHT:
@@ -149,8 +149,6 @@ public class JTGrid {
 			if(prevPosition.y > MIN_XY) {
 				newPosition = new Vector2i(prevPosition.x, block.getPosition().y - 1);
 				updateBlock(block, newPosition);
-			}else {
-				block.topHit(true);
 			}
 			break;
 		case DOWN:
@@ -158,8 +156,6 @@ public class JTGrid {
 				newPosition = new Vector2i(prevPosition.x, prevPosition.y + 1);
 				updateBlock(block, newPosition);
 				
-			}else {
-				block.bottomHit(true);
 			}
 				
 			break;
@@ -167,8 +163,6 @@ public class JTGrid {
 			if(prevPosition.x > MIN_XY) {
 				newPosition = new Vector2i(prevPosition.x - 1, prevPosition.y);
 				updateBlock(block, newPosition);			
-			}else {
-				block.leftHit(true);
 			}
 				
 			break;
@@ -176,8 +170,6 @@ public class JTGrid {
 			if(prevPosition.x < MAX_X) {
 				newPosition = new Vector2i(prevPosition.x + 1, prevPosition.y);
 				updateBlock(block, newPosition);	
-			}else {
-				block.rightHit(true);
 			}
 			break;
 		
@@ -192,11 +184,6 @@ public class JTGrid {
 		if(block == null)
 				throw new NullBlockException();
 			
-
-		if(isBlockAtVector(newPosition))
-			return;
-		
-
 		deleteAtVector(block.getPosition());
 		block.setPosition(newPosition);
 		setAtVector(block);

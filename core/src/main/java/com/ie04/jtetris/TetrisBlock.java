@@ -51,7 +51,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		
 		if(!rightHit && !bottomHit) {
 			jtg.updateBlock(this, Direction.RIGHT);
-			
 		}
 		if(leftHit)
 			leftHit = false;

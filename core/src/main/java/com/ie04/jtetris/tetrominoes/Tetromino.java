@@ -62,14 +62,11 @@ public abstract class Tetromino implements Animate {
 	}
 	
 
-	public void update(Direction direction) {
+	public void update(Direction direction) throws NullBlockException, OutOfGridException {
 
 		
 		for(int i = 0; i < blockArray.length; i++) {
-			try {
-				jtg.updateBlock(blockArray[i], direction);
-			} catch (NullBlockException e) { e.printStackTrace();} 
-			  catch (OutOfGridException e) { e.printStackTrace();} 
+			jtg.updateBlock(blockArray[i], direction); 
 		}
 	}
 
@@ -108,14 +105,16 @@ public abstract class Tetromino implements Animate {
 			blockArray[i].moveLeft();
 			
 		}
+		if(rightHit) { //Removes residual collision if movement is in opposite direction
+			rightHit = false;
+			blockArray[0].rightHit(false);
+		}
 	}
 	public void moveRight() throws NullBlockException, OutOfGridException {
 		
 		for(int i = 0; i < blockArray.length; i++) {
-			if(jtg.queryCollision(blockArray[i], Direction.RIGHT)) {
+			if(jtg.queryCollision(blockArray[i], Direction.RIGHT))
 				blockArray[i].rightHit(true);
-				rightHit = true;
-			}
 		}
 		
 		for(int i = 0; i < blockArray.length; i++) {	
