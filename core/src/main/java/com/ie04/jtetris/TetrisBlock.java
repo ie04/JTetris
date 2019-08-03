@@ -15,7 +15,6 @@ public class TetrisBlock extends Sprite implements Animate {
 	private TetrisBlock prev; 
 	private JTGrid jtg;
 	private Vector2i position;
-	private Vector2i prevPosition;
 	private boolean topHit = false;
 	private boolean bottomHit = false;
 	private boolean leftHit = false;
@@ -35,9 +34,9 @@ public class TetrisBlock extends Sprite implements Animate {
 		this(new Vector2i(0,0), img, jtg, tet);
 	}
 	public void moveUp() throws NullBlockException, OutOfGridException { //Used for wallKick() and to satisfy Animate
-		if(!topHit) {
-			
+		if(!topHit) {		
 			jtg.updateBlock(this, Direction.UP);
+			
 			
 		}
 	}
@@ -49,23 +48,24 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	@Override
 	public void moveRight() throws NullBlockException, OutOfGridException {
-
+		
 		if(!rightHit && !bottomHit) {
 			jtg.updateBlock(this, Direction.RIGHT);
 			
-			if(leftHit)
-				leftHit = false; //Removes residual collision
 		}
+		if(leftHit)
+			leftHit = false;
 	}
 	@Override
 	public void moveLeft() throws NullBlockException, OutOfGridException {
-	
+		
 		if(!leftHit && !bottomHit) {
 			jtg.updateBlock(this, Direction.LEFT);
 			
-			if(rightHit)
-				rightHit = false;
-			}
+		}
+		
+		if(rightHit)
+			rightHit = false;
 		
 	}
 	public void topHit(boolean is) {
@@ -193,9 +193,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		else
 			return true;
 	}
-	private void queryCollision() {
-		//if(this.getPosition().y == 17 )
-	}
 	public TetrisBlock getNext() {
 		return next;
 	}
@@ -219,12 +216,6 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	public boolean isGroundHit() {
 		return bottomHit;
-	}
-	public Vector2i getPrevPosition() {
-		return prevPosition;
-	}
-	public void setPrevPosition(Vector2i prevPosition) {
-		this.prevPosition = prevPosition;
 	}
 	public Tetromino getTet() {
 		return tet;

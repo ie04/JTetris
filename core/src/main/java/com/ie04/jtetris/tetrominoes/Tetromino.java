@@ -85,24 +85,42 @@ public abstract class Tetromino implements Animate {
 	}
 	}
 	public void moveDown() throws NullBlockException, OutOfGridException {
+		
+		for(int i = 0; i < blockArray.length; i++) {
+			if(jtg.queryCollision(blockArray[i], Direction.DOWN))
+				blockArray[i].bottomHit(true);
+		}
+		
 		for(int i = 0; i < blockArray.length; i++) {
 				blockArray[i].moveDown();
 		}
 	}
 	public void moveLeft() throws NullBlockException, OutOfGridException {
+		
+		for(int i = 0; i < blockArray.length; i++) {
+			if(jtg.queryCollision(blockArray[i], Direction.LEFT)) {
+				blockArray[i].leftHit(true);
+				leftHit = true;
+			}	
+		}
+		
 		for(int i = 0; i < blockArray.length; i++) {
 			blockArray[i].moveLeft();
 			
 		}
-		if(rightHit) //Removes residual collision if movement is in opposite direction
-			rightHit = false;
 	}
 	public void moveRight() throws NullBlockException, OutOfGridException {
+		
+		for(int i = 0; i < blockArray.length; i++) {
+			if(jtg.queryCollision(blockArray[i], Direction.RIGHT)) {
+				blockArray[i].rightHit(true);
+				rightHit = true;
+			}
+		}
+		
 		for(int i = 0; i < blockArray.length; i++) {	
 			blockArray[i].moveRight();
 		}
-		if(leftHit) 
-			leftHit = false;
 	}
 	/**
 	 * @return the topHit

@@ -49,8 +49,8 @@ public class JTetris extends BasicGame {
 	    	if(upArrowPressed)
 	    		jtb.currentTet.rotate(); //Rotates clockwise
 	    	
-	    	}catch(NullBlockException e) { e.printStackTrace(); }
-	    	 catch(OutOfGridException e) { e.printStackTrace(); }
+	    	}catch(NullBlockException e) { e.printStackTrace(); System.exit(0);}
+	    	 catch(OutOfGridException e) { e.printStackTrace(); System.exit(0);}
     }
     
     @Override

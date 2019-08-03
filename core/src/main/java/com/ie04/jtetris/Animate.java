@@ -6,8 +6,8 @@ package com.ie04.jtetris;
 
 public interface Animate { //Interface of animate figures
 	
-	public void moveUp();
-	public void moveDown();
-	public void moveRight();
-	public void moveLeft();
+	public void moveUp()    throws NullBlockException, OutOfGridException;
+	public void moveDown()  throws NullBlockException, OutOfGridException;
+	public void moveRight() throws NullBlockException, OutOfGridException;
+	public void moveLeft()  throws NullBlockException, OutOfGridException;
 }
