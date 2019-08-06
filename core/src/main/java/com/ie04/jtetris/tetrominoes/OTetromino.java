@@ -23,10 +23,10 @@ public class OTetromino extends Tetromino {
 
 	@Override
 	protected void construct() throws OutOfGridException, NullBlockException {
-		jtg.updateBlock(blockArray.get(0), new Vector2i(3, 1));
-		jtg.updateBlock(blockArray.get(1), new Vector2i(4, 1));
-		jtg.updateBlock(blockArray.get(2), new Vector2i(3, 0));
-		jtg.updateBlock(blockArray.get(3), new Vector2i(4, 0));
+		blockArray.get(0).setPosition(3, 1);
+		blockArray.get(1).setPosition(4, 1);
+		blockArray.get(2).setPosition(3, 0);
+		blockArray.get(3).setPosition(4, 0);
 	}
 
 	@Override

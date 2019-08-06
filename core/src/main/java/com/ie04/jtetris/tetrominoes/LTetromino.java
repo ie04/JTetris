@@ -8,7 +8,6 @@ import com.ie04.jtetris.Direction;
 import com.ie04.jtetris.JTGrid;
 import com.ie04.jtetris.NullBlockException;
 import com.ie04.jtetris.OutOfGridException;
-import com.ie04.jtetris.Vector2i;
 
 public class LTetromino extends Tetromino {
 
@@ -17,10 +16,10 @@ public class LTetromino extends Tetromino {
 	}
 	
 	protected void construct() throws OutOfGridException, NullBlockException {
-		jtg.updateBlock(blockArray.get(0), new Vector2i(3, 1));
-		jtg.updateBlock(blockArray.get(1), new Vector2i(3, 0));
-		jtg.updateBlock(blockArray.get(2), new Vector2i(4, 0));
-		jtg.updateBlock(blockArray.get(3), new Vector2i(5, 0));
+		blockArray.get(0).setPosition(3, 1);
+		blockArray.get(1).setPosition(3, 0);
+		blockArray.get(2).setPosition(4, 0);
+		blockArray.get(3).setPosition(5, 0);
 	}
 
 	@Override

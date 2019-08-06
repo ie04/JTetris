@@ -200,7 +200,6 @@ public class JTGrid {
 	
 
 	public void updateBlock(TetrisBlock block, Vector2i newPosition) throws OutOfGridException, NullBlockException { //Safely moves TetrisBlock while deleting previous position
- //Safely moves TetrisBlock while deleting previous position
 
 		
 		if(block == null)

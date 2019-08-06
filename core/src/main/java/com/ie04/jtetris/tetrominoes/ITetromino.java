@@ -14,10 +14,10 @@ public class ITetromino extends Tetromino {
 	
 	@Override
 	public void construct() throws OutOfGridException, NullBlockException {
-		jtg.updateBlock(blockArray.get(0), new Vector2i(4, 3));
-		jtg.updateBlock(blockArray.get(1), new Vector2i(4, 2));
-		jtg.updateBlock(blockArray.get(2), new Vector2i(4, 1));
-		jtg.updateBlock(blockArray.get(3), new Vector2i(4, 0));
+		blockArray.get(0).setPosition(4, 3);		
+		blockArray.get(1).setPosition(4, 2);
+		blockArray.get(2).setPosition(4, 1);
+		blockArray.get(3).setPosition(4, 0);
 		
 	}
 	
