@@ -11,6 +11,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	/*prev and next create a doubly linked list of tetrisBlocks, allowing
 	 * collision information to propagate across the entire tetromino */
 	private Tetromino tet;
+	private int tetID;
 	private TetrisBlock next; 
 	private TetrisBlock prev; 
 	private JTGrid jtg;
@@ -28,6 +29,7 @@ public class TetrisBlock extends Sprite implements Animate {
 		this.jtg = jtg;
 		this.position = position;
 		this.tet = tet;
+		tetID = tet.tetID;
 	}
 	
 	public TetrisBlock(String img, JTGrid jtg, Tetromino tet) {	
@@ -220,6 +222,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		return tet;
 	}
 	public int getTetID() {
-		return getTet().tetID;
+		return tetID;
 	}
 }

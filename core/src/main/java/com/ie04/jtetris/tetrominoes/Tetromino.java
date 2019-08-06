@@ -1,5 +1,8 @@
 package com.ie04.jtetris.tetrominoes;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.mini2Dx.core.graphics.Graphics;
 
 import com.ie04.jtetris.Animate;
@@ -10,53 +13,61 @@ import com.ie04.jtetris.OutOfGridException;
 import com.ie04.jtetris.TetrisBlock;
 
 public abstract class Tetromino implements Animate {
-	protected static int numTetrominoes;
-	public int tetID;
+	
+	static int numTetrominoes; //Amount of tetrominoes on grid
+	private static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
+	public int tetID; //Each tetromino recieves an ID to differentiate from other blocks
 	protected JTGrid jtg;
-	protected TetrisBlock[] blockArray; 
-	protected int currentState = 0;
+	protected ArrayList<TetrisBlock> blockArray; 
+	protected int currentState = 0; //State of figure used for rotation
 	protected boolean topHit; //Used to determine loss
 	protected boolean bottomHit;
 	protected boolean leftHit;
 	protected boolean rightHit;
 	
-	Tetromino(String img, JTGrid jtg) {
-		blockArray = new TetrisBlock[4]; //All tetrominoes have 4 blocks
+	Tetromino(String img, JTGrid jtg) throws OutOfGridException, NullBlockException {
 		
-		for(int i = 0; i < blockArray.length; i++) { //Initializing blocks...
-			blockArray[i] = new TetrisBlock(img, jtg, this);
+		tetID = numTetrominoes;
+		numTetrominoes++;
+		
+		
+		blockArray = new ArrayList<TetrisBlock>();
+		
+		for(int i = 0; i < NUM_BLOCKS; i++) { //Initializing blocks...
+			blockArray.add(new TetrisBlock(img, jtg, this));
 		}
-		for(int i = 0; i < blockArray.length; i++) { //Creating linked list of TetrisBlocks
+		for(int i = 0; i < NUM_BLOCKS; i++) { //Creating linked list of TetrisBlocks
 			
 			if(i == 0) //is head
-				blockArray[i].setNext(blockArray[i+1]);
+				blockArray.get(i).setNext(blockArray.get(i + 1));
 			
 			else if(i == 3) //is tail
-				blockArray[i].setPrev(blockArray[i-1]);
+				blockArray.get(i).setPrev(blockArray.get(i - 1));
 			
 			else { //is middle
-				blockArray[i].setNext(blockArray[i+1]);
-				blockArray[i].setPrev(blockArray[i-1]);
+				blockArray.get(i).setNext(blockArray.get(i + 1));
+				blockArray.get(i).setPrev(blockArray.get(i - 1));
 			}
 			
 			
 		}
 		this.jtg = jtg;
-		tetID = numTetrominoes;
-		numTetrominoes++;
+		
+		
 		construct(); //Constructs tetromino shape
 	}
-	protected abstract void construct();	
+	protected abstract void construct() throws OutOfGridException, NullBlockException;	
 	public abstract void rotate() throws NullBlockException, OutOfGridException;
-	public void render(Graphics g) {
+	protected abstract void wallKick();
+	
+	private void deleteBlock(TetrisBlock block) {
+		if(blockArray.contains(block))
+			blockArray.remove(block);
+	}
+	public void render(Graphics g) throws OutOfGridException {
 		
-			for(int i = 0; i < blockArray.length; i++) {
-				try {
-					jtg.addBlockToGrid(blockArray[i], g);
-				} catch (OutOfGridException e) {
-					System.out.println("Error: Block doesn't exist");
-					e.printStackTrace();
-				}
+			for(int i = 0; i < NUM_BLOCKS; i++) {
+				jtg.addBlockToGrid(blockArray.get(i), g);
 			}
 		
 	}
@@ -65,60 +76,60 @@ public abstract class Tetromino implements Animate {
 	public void update(Direction direction) throws NullBlockException, OutOfGridException {
 
 		
-		for(int i = 0; i < blockArray.length; i++) {
-			jtg.updateBlock(blockArray[i], direction); 
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			jtg.updateBlock(blockArray.get(i), direction); 
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private void wallKick() { //Moves tetromino during rotation if it is near a boundary
 
-			
-			
-	}
+
+
 	public void moveUp() throws NullBlockException, OutOfGridException {
-		for(int i = 0; i < blockArray.length; i++) {
-			blockArray[i].moveUp();
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			blockArray.get(i).moveUp();
 	}
 	}
 	public void moveDown() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < blockArray.length; i++) {
-			if(jtg.queryCollision(blockArray[i], Direction.DOWN))
-				blockArray[i].bottomHit(true);
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			if(jtg.queryCollision(blockArray.get(i), Direction.DOWN)) {
+				blockArray.get(i).bottomHit(true);
+				bottomHit = true;
+			}
 		}
 		
-		for(int i = 0; i < blockArray.length; i++) {
-				blockArray[i].moveDown();
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			blockArray.get(i).moveDown();
 		}
 	}
 	public void moveLeft() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < blockArray.length; i++) {
-			if(jtg.queryCollision(blockArray[i], Direction.LEFT)) {
-				blockArray[i].leftHit(true);
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			if(jtg.queryCollision(blockArray.get(i), Direction.LEFT)) {
+				blockArray.get(i).leftHit(true);
 				leftHit = true;
 			}	
 		}
 		
-		for(int i = 0; i < blockArray.length; i++) {
-			blockArray[i].moveLeft();
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			blockArray.get(i).moveLeft();
 			
 		}
-		if(rightHit) { //Removes residual collision if movement is in opposite direction
+		if(rightHit)
 			rightHit = false;
-			blockArray[0].rightHit(false);
-		}
+		
 	}
 	public void moveRight() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < blockArray.length; i++) {
-			if(jtg.queryCollision(blockArray[i], Direction.RIGHT))
-				blockArray[i].rightHit(true);
+		for(int i = 0; i < NUM_BLOCKS; i++) {
+			if(jtg.queryCollision(blockArray.get(i), Direction.RIGHT)) {
+				blockArray.get(i).rightHit(true);
+				rightHit = true;
+			}
 		}
 		
-		for(int i = 0; i < blockArray.length; i++) {	
-			blockArray[i].moveRight();
+		for(int i = 0; i < NUM_BLOCKS; i++) {	
+			blockArray.get(i).moveRight();
 		}
 	}
 	/**

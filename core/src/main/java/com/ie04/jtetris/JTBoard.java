@@ -13,14 +13,14 @@ public class JTBoard extends Texture { //Manages game and point system
 	public Tetromino nextTet;
 	public ArrayList<Tetromino> prevTet; //Dynamically increasing array of all previous terominoes
 	
- 	public JTBoard(){
+ 	public JTBoard() throws OutOfGridException, NullBlockException {
 		super("JTetrisBG.png");
 		jtg = new JTGrid();
 		currentTet = nextTet();
 		nextTet = nextTet();
 		prevTet = new ArrayList<Tetromino>(); 
 	}
-	public Tetromino nextTet() { //Picks random tetromino from pool of 7
+	public Tetromino nextTet() throws OutOfGridException, NullBlockException { //Picks random tetromino from pool of 7
 		int selection = (int)(Math.random() * 7 + 1);
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
@@ -34,7 +34,7 @@ public class JTBoard extends Texture { //Manages game and point system
 		}
 		
 	}
-	public void switchFocus() {
+	public void switchFocus() throws OutOfGridException, NullBlockException {
 		prevTet.add(currentTet); //Adds old tetromino to array	
 		currentTet = nextTet;
 		nextTet = nextTet(); //nextTet gets random tetromino

@@ -15,7 +15,13 @@ public class JTetris extends BasicGame {
 	
 	@Override
     public void initialise() {
-    	jtb = new JTBoard();  
+    	try {
+			jtb = new JTBoard();
+		} catch (OutOfGridException e) {
+			e.printStackTrace();
+		} catch (NullBlockException e) {
+			e.printStackTrace();
+		}  
     }
     
     @Override
@@ -60,12 +66,13 @@ public class JTetris extends BasicGame {
     public void render(Graphics g) {
     	
 		g.drawTexture(jtb, 0f, 0f); //Renders tetris screen
-		
+	try {	
 		jtb.currentTet.render(g); //Renders current tetromino
 		
 		for(Tetromino tet : jtb.prevTet) //Renders all previous tetrominoes
 			tet.render(g);
-			
+		
+	}catch(OutOfGridException e) { e.printStackTrace(); }	
 		
 			
 		

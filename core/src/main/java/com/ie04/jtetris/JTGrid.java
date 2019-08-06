@@ -79,6 +79,28 @@ public class JTGrid {
 		default: return block;
 		}
 	}
+	public void setRelativeToBlock(TetrisBlock setblock, TetrisBlock relBlock, int xOffset, int yOffset) throws OutOfGridException, NullBlockException {
+		updateBlock(setblock, new Vector2i(relBlock.getPosition().x + xOffset, relBlock.getPosition().y + yOffset));	
+	}
+	public void setRelativeToBlock(TetrisBlock setBlock, TetrisBlock relBlock, Direction direction) throws OutOfGridException, NullBlockException {
+		switch(direction) {
+		case DOWN:
+			setRelativeToBlock(setBlock, relBlock, 0, 1);
+			break;
+		case LEFT:
+			setRelativeToBlock(setBlock, relBlock, -1, 0);
+			break;
+		case RIGHT:
+			setRelativeToBlock(setBlock, relBlock, 1, 0);
+			break;
+		case UP:
+			setRelativeToBlock(setBlock, relBlock, 0, -1);
+			break;
+		default:
+			break;
+		
+		}
+	}
 	public boolean isForeignBlockAdjacent(TetrisBlock block, Direction direction) throws OutOfGridException {
 		switch(direction) {
 		case DOWN:
@@ -101,6 +123,7 @@ public class JTGrid {
 			throw new OutOfGridException();
 		
 		tetGrid[vec.y][vec.x] = null;
+		
 	}
 	public void deleteAtVector(int x, int y) throws OutOfGridException {
 		deleteAtVector(new Vector2i(x,y));
@@ -172,7 +195,6 @@ public class JTGrid {
 				updateBlock(block, newPosition);	
 			}
 			break;
-		
 		}
 	}
 	
@@ -215,11 +237,10 @@ public class JTGrid {
 		return pointsAwarded;
 	}
 	public void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
-		if(line > MAX_Y)
-			return;
+		if(line > MAX_Y || line < MIN_XY)
+			throw new OutOfGridException();
 		
 		for(int i = 0; i < MAX_X; i++) {
-
 			deleteAtVector(line, i);
 		}
 		
