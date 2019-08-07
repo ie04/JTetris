@@ -60,7 +60,7 @@ public abstract class Tetromino implements Animate {
 	public abstract void rotate() throws NullBlockException, OutOfGridException;
 	protected abstract void wallKick();
 	
-	private void deleteBlock(TetrisBlock block) {
+	public void deleteBlock(TetrisBlock block) {
 		if(blockArray.contains(block))
 			blockArray.remove(block);
 	}

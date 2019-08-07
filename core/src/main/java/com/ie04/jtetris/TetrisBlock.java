@@ -194,6 +194,9 @@ public class TetrisBlock extends Sprite implements Animate {
 		else
 			return true;
 	}
+	public void destruct() {
+		this.tet.deleteBlock(this);
+	}
 	public TetrisBlock getNext() {
 		return next;
 	}

@@ -60,7 +60,7 @@ public class JTetromino extends Tetromino {
 		else if(currentState == 3) {
 			jtg.setRelativeToBlock(blockArray.get(1), blockArray.get(2), Direction.RIGHT);
 			jtg.setRelativeToBlock(blockArray.get(3), blockArray.get(2), Direction.LEFT);
-			jtg.setRelativeToBlock(blockArray.get(0), blockArray.get(2), Direction.DOWN);
+			jtg.setRelativeToBlock(blockArray.get(0), blockArray.get(1), Direction.DOWN);
 			currentState = 0;
 		}
 		

@@ -39,7 +39,7 @@ public class STetromino extends Tetromino {
 		wallKick();
 		if(currentState == 0) {
 			jtg.setRelativeToBlock(blockArray.get(1), blockArray.get(2), Direction.LEFT);
-			jtg.setRelativeToBlock(blockArray.get(0), blockArray.get(3), Direction.UP);
+			jtg.setRelativeToBlock(blockArray.get(0), blockArray.get(1), Direction.UP);
 			jtg.setRelativeToBlock(blockArray.get(3), blockArray.get(2), Direction.DOWN);
 			currentState = 1;
 		}else if(currentState == 1) {
