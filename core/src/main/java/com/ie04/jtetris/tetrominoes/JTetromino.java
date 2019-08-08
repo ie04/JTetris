@@ -9,7 +9,6 @@ import com.ie04.jtetris.Direction;
 import com.ie04.jtetris.JTGrid;
 import com.ie04.jtetris.NullBlockException;
 import com.ie04.jtetris.OutOfGridException;
-import com.ie04.jtetris.Vector2i;
 
 public class JTetromino extends Tetromino {
 
@@ -67,8 +66,8 @@ public class JTetromino extends Tetromino {
 	}
 
 	@Override
-	protected void wallKick() {
-		// TODO Auto-generated method stub
+	protected void wallKick() throws NullBlockException, OutOfGridException {
+		
 		
 	}
 

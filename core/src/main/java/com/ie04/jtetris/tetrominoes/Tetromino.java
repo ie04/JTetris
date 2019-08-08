@@ -14,11 +14,11 @@ import com.ie04.jtetris.TetrisBlock;
 
 public abstract class Tetromino implements Animate {
 	
-	static int numTetrominoes; //Amount of tetrominoes on grid
-	private static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
+	private static int numTetrominoes; //Amount of tetrominoes on grid
+	protected static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
 	public int tetID; //Each tetromino recieves an ID to differentiate from other blocks
 	protected JTGrid jtg;
-	protected ArrayList<TetrisBlock> blockArray; 
+	public ArrayList<TetrisBlock> blockArray; 
 	protected int currentState = 0; //State of figure used for rotation
 	protected boolean topHit; //Used to determine loss
 	protected boolean bottomHit;
@@ -58,7 +58,7 @@ public abstract class Tetromino implements Animate {
 	}
 	protected abstract void construct() throws OutOfGridException, NullBlockException;	
 	public abstract void rotate() throws NullBlockException, OutOfGridException;
-	protected abstract void wallKick();
+	protected abstract void wallKick() throws NullBlockException, OutOfGridException;
 	
 	public void deleteBlock(TetrisBlock block) {
 		if(blockArray.contains(block))
@@ -66,7 +66,7 @@ public abstract class Tetromino implements Animate {
 	}
 	public void render(Graphics g) throws OutOfGridException {
 		
-			for(int i = 0; i < NUM_BLOCKS; i++) {
+			for(int i = 0; i < blockArray.size(); i++) {
 				jtg.addBlockToGrid(blockArray.get(i), g);
 			}
 		
@@ -76,7 +76,7 @@ public abstract class Tetromino implements Animate {
 	public void update(Direction direction) throws NullBlockException, OutOfGridException {
 
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			jtg.updateBlock(blockArray.get(i), direction); 
 		}
 	}
@@ -85,33 +85,33 @@ public abstract class Tetromino implements Animate {
 
 
 	public void moveUp() throws NullBlockException, OutOfGridException {
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			blockArray.get(i).moveUp();
 	}
 	}
 	public void moveDown() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			if(jtg.queryCollision(blockArray.get(i), Direction.DOWN)) {
 				blockArray.get(i).bottomHit(true);
 				bottomHit = true;
 			}
 		}
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			blockArray.get(i).moveDown();
 		}
 	}
 	public void moveLeft() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			if(jtg.queryCollision(blockArray.get(i), Direction.LEFT)) {
 				blockArray.get(i).leftHit(true);
 				leftHit = true;
 			}	
 		}
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			blockArray.get(i).moveLeft();
 			
 		}
@@ -121,14 +121,14 @@ public abstract class Tetromino implements Animate {
 	}
 	public void moveRight() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {
+		for(int i = 0; i < blockArray.size(); i++) {
 			if(jtg.queryCollision(blockArray.get(i), Direction.RIGHT)) {
 				blockArray.get(i).rightHit(true);
 				rightHit = true;
 			}
 		}
 		
-		for(int i = 0; i < NUM_BLOCKS; i++) {	
+		for(int i = 0; i < blockArray.size(); i++) {	
 			blockArray.get(i).moveRight();
 		}
 	}

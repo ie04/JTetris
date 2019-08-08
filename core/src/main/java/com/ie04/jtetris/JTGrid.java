@@ -239,8 +239,9 @@ public class JTGrid {
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
-		for(int i = 0; i < MAX_X; i++) {
-			deleteAtVector(line, i);
+		for(int i = 0; i < 8; i++) {
+			if(isBlockAtVector(i, line))
+				getAtVector(i, line).destruct();
 		}
 		
 	}
