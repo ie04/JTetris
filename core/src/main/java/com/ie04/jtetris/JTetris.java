@@ -32,11 +32,12 @@ public class JTetris extends BasicGame {
     	boolean upArrowPressed = Gdx.input.isKeyJustPressed(Input.Keys.UP);
     	inputTime += delta;
 	    try {
-	    	jtb.jtg.testLineComplete();
+	    	
 	    	if (inputTime > speed) { //delay in seconds 
 	    		jtb.currentTet.moveDown();
 	    		
 	    		if(jtb.currentTet.isGroundHit()) {
+	    			jtb.jtg.cleaveComplete();
 	    			speed = 0.3; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino
 	    			

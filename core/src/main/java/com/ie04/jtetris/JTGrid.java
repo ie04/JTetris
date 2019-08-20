@@ -214,35 +214,58 @@ public class JTGrid {
 				
 			
 	}	
-	public int testLineComplete() throws OutOfGridException {
-		int pointsAwarded = 0;
-		int blocksInLine = 0;
-		for(int i = 0; i < MAX_Y; i++) {
-			
-			for(int j = 0; j < MAX_X; j++) {
-				
-				if(tetGrid[i][j] == null)
-					break;	
-				 else 
-					blocksInLine++;
-			}
-			if(blocksInLine == MAX_Y) { //If line is filled
-				cleaveLine(i);
-				pointsAwarded++;
-				blocksInLine = 0; 
-			}
-				
+	private boolean isLineEmpty(int line) throws OutOfGridException {
+		if(line > MAX_Y || line < MIN_XY)
+			throw new OutOfGridException();
+		
+		for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
+			if(isBlockAtVector(atBlock, line))
+				return false;
 		}
-		return pointsAwarded;
+		return true;
 	}
-	public void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
+	public int cleaveComplete() throws OutOfGridException, NullBlockException { //Cleaves completed lines
+		int blocksInLine = 0;
+		int linesCleared = 0;
+			for(int line = (int) MAX_Y; line > MIN_XY; line--) {
+				
+					for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) { //checks block before test
+						if(isBlockAtVector(atBlock, line))
+							blocksInLine++;
+							
+					}
+					
+					if(blocksInLine == 8) {
+						cleaveLine(line);
+						linesCleared++;
+					}
+					blocksInLine = 0;
+			}
+			return linesCleared;
+	}
+	private void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
 		for(int i = 0; i < 8; i++) {
-			if(isBlockAtVector(i, line))
+			if(isBlockAtVector(i, line)) {
 				getAtVector(i, line).destruct();
+				deleteAtVector(i, line);
+			}
 		}
 		
+	}
+	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles grid after line clearing
+		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
+			if(isLineEmpty(line)) {
+				for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
+					if(!isLineEmpty(line-1) && isBlockAtVector(atBlock, line-1))
+						getAtVector(atBlock, line-1).moveDown();		
+				}
+				if(!isLineEmpty(line-1))
+					line = (int) MAX_Y;
+			}
+				
+		}
 	}
 }
