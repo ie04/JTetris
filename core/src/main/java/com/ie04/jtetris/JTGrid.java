@@ -224,6 +224,15 @@ public class JTGrid {
 		}
 		return true;
 	}
+	private void dropLine(int line) throws OutOfGridException, NullBlockException {
+		if(line > MAX_Y || line < MIN_XY)
+			throw new OutOfGridException();
+		
+		for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
+			if(isBlockAtVector(atBlock, line))
+				updateBlock(getAtVector(atBlock, line), Direction.DOWN);
+		}
+	}
 	public int cleaveComplete() throws OutOfGridException, NullBlockException { //Cleaves completed lines
 		int blocksInLine = 0;
 		int linesCleared = 0;
@@ -241,6 +250,7 @@ public class JTGrid {
 					}
 					blocksInLine = 0;
 			}
+			settleGrid();
 			return linesCleared;
 	}
 	private void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
@@ -257,15 +267,10 @@ public class JTGrid {
 	}
 	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles grid after line clearing
 		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
-			if(isLineEmpty(line)) {
-				for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
-					if(!isLineEmpty(line-1) && isBlockAtVector(atBlock, line-1))
-						getAtVector(atBlock, line-1).moveDown();		
-				}
-				if(!isLineEmpty(line-1))
-					line = (int) MAX_Y;
+			if(isLineEmpty(line) && !isLineEmpty(line-1)) {
+				dropLine(line-1);
+				line = (int) MAX_Y;
 			}
-				
 		}
 	}
 }
