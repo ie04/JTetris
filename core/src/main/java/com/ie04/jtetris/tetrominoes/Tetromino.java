@@ -1,10 +1,7 @@
 package com.ie04.jtetris.tetrominoes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.mini2Dx.core.graphics.Graphics;
-
 import com.ie04.jtetris.Animate;
 import com.ie04.jtetris.Direction;
 import com.ie04.jtetris.JTGrid;
@@ -12,15 +9,15 @@ import com.ie04.jtetris.NullBlockException;
 import com.ie04.jtetris.OutOfGridException;
 import com.ie04.jtetris.TetrisBlock;
 
-public abstract class Tetromino implements Animate {
+public abstract class Tetromino implements Animate{
 	
-	private static int numTetrominoes; //Amount of tetrominoes on grid
+	private static int numTetrominoes; //Amount of tetrominoes spawned on grid
 	protected static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
-	public int tetID; //Each tetromino recieves an ID to differentiate from other blocks
+	public int tetID; //Each tetromino recieves an ID to differentiate it from other blocks
 	protected JTGrid jtg;
 	public ArrayList<TetrisBlock> blockArray; 
 	protected int currentState = 0; //State of figure used for rotation
-	protected boolean topHit; //Used to determine loss
+	protected boolean topHit;
 	protected boolean bottomHit;
 	protected boolean leftHit;
 	protected boolean rightHit;
@@ -64,10 +61,12 @@ public abstract class Tetromino implements Animate {
 		if(blockArray.contains(block))
 			blockArray.remove(block);
 	}
-	public void render(Graphics g) throws OutOfGridException {
+	public void render(Graphics g) {
 		
 			for(int i = 0; i < blockArray.size(); i++) {
-				jtg.addBlockToGrid(blockArray.get(i), g);
+				try {
+					jtg.addBlockToGrid(blockArray.get(i), g);
+				} catch (OutOfGridException e) { e.printStackTrace(); }
 			}
 		
 	}
@@ -103,14 +102,25 @@ public abstract class Tetromino implements Animate {
 		}
 	}
 	public void moveLeft() throws NullBlockException, OutOfGridException {
-		
+		boolean areAnyHit = false;
 		for(int i = 0; i < blockArray.size(); i++) {
 			if(jtg.queryCollision(blockArray.get(i), Direction.LEFT)) {
 				blockArray.get(i).leftHit(true);
 				leftHit = true;
 			}	
 		}
-		
+		for(int i = 0; i < blockArray.size(); i++) {
+			areAnyHit = blockArray.get(i).isLeftHit() ? true : false;
+			if(areAnyHit)
+				break;
+		}
+		if(!areAnyHit) {
+			for(int i = 0; i < blockArray.size(); i++) {
+				blockArray.get(i).leftHit(false);
+			}
+				
+		}
+			
 		for(int i = 0; i < blockArray.size(); i++) {
 			blockArray.get(i).moveLeft();
 			

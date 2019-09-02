@@ -8,7 +8,7 @@ import com.ie04.jtetris.tetrominoes.Tetromino;
 
 public class TetrisBlock extends Sprite implements Animate {
 	
-	/*prev and next create a doubly linked list of tetrisBlocks, allowing
+	/* prev and next create a doubly linked list of tetrisBlocks, allowing
 	 * collision information to propagate across the entire tetromino */
 	private Tetromino tet;
 	private int tetID;
@@ -220,6 +220,12 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	public boolean isGroundHit() {
 		return bottomHit;
+	}
+	public boolean isLeftHit() {
+		return leftHit;
+	}
+	public boolean isRightHit() {
+		return rightHit;
 	}
 	public Tetromino getTet() {
 		return tet;

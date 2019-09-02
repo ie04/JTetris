@@ -30,6 +30,7 @@ public class JTetris extends BasicGame {
     	boolean rightArrowPressed = Gdx.input.isKeyJustPressed(Input.Keys.RIGHT);
     	boolean downArrowPressed = Gdx.input.isKeyJustPressed(Input.Keys.DOWN);
     	boolean upArrowPressed = Gdx.input.isKeyJustPressed(Input.Keys.UP);
+    	boolean heldPressed = Gdx.input.isKeyJustPressed(Input.Keys.H);
     	inputTime += delta;
 	    try {
 	    	
@@ -41,6 +42,10 @@ public class JTetris extends BasicGame {
 	    			speed = 0.3; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino
 	    			
+	    		}
+	    		
+	    		if(jtb.jtg.isWallHit()) {
+	    			System.exit(0);
 	    		}
 	    		
 	    		inputTime = 0;
@@ -58,6 +63,9 @@ public class JTetris extends BasicGame {
 	    	if(upArrowPressed)
 	    		jtb.currentTet.rotate(); //Rotates clockwise
 	    	
+	    	if(heldPressed) {
+	    		jtb.switchHeld();
+	    	}
 	    	}catch(NullBlockException e) { e.printStackTrace(); System.exit(0);}
 	    	 catch(OutOfGridException e) { e.printStackTrace(); System.exit(0);}
     }
@@ -68,16 +76,7 @@ public class JTetris extends BasicGame {
     @Override
     public void render(Graphics g) {
     	
-		g.drawTexture(jtb, 0f, 0f); //Renders tetris screen
-	try {	
-		jtb.currentTet.render(g); //Renders current tetromino
-		
-		for(Tetromino tet : jtb.prevTet) //Renders all previous tetrominoes
-			tet.render(g);
-		
-	}catch(OutOfGridException e) { e.printStackTrace(); }	
-		
-			
-		
+	jtb.render(g);	
+	
     }
 }

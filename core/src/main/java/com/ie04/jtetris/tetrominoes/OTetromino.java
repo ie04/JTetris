@@ -7,7 +7,6 @@ package com.ie04.jtetris.tetrominoes;
 import com.ie04.jtetris.JTGrid;
 import com.ie04.jtetris.NullBlockException;
 import com.ie04.jtetris.OutOfGridException;
-import com.ie04.jtetris.Vector2i;
 
 public class OTetromino extends Tetromino {
 

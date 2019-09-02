@@ -16,7 +16,9 @@ public class JTGrid {
 	public static final float MAX_Y = 17; //Excludes 0
 	public static final float MAX_X = 7;
 	public static final float MIN_XY = 0; //Both 0
+	private boolean wallHit = false;
 	private TetrisBlock[][] tetGrid;
+	
 	
 	JTGrid(){
 		tetGrid = new TetrisBlock[18][8]; //0 inclusive
@@ -131,8 +133,10 @@ public class JTGrid {
 	
 	public boolean isBlockAtVector(Vector2i vec) throws OutOfGridException {
 		if(doesVectorExceedBounds(vec))
-			return false;
-		
+			return false; /*
+							Adjacents should still be checked without exception if
+							block is near bounds
+						  */
 		if(getAtVector(vec) != null)
 			return true;
 		else
@@ -178,9 +182,7 @@ public class JTGrid {
 			if(prevPosition.y < MAX_Y) {
 				newPosition = new Vector2i(prevPosition.x, prevPosition.y + 1);
 				updateBlock(block, newPosition);
-				
-			}
-				
+			}	
 			break;
 		case LEFT:	
 			if(prevPosition.x > MIN_XY) {
@@ -269,8 +271,11 @@ public class JTGrid {
 		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
 			if(isLineEmpty(line) && !isLineEmpty(line-1)) {
 				dropLine(line-1);
-				line = (int) MAX_Y;
+				line = 18;
 			}
 		}
+	}
+	public boolean isWallHit() {
+		return wallHit;
 	}
 }
