@@ -24,7 +24,7 @@ public class JTBoard extends Texture { //Manages game and point system
 		currentTet = nextTet();
 		nextTet = nextTet();
 		prevTet = new ArrayList<Tetromino>(); 
-		nextDisplay = new JPrevDisplay();
+		nextDisplay= new JPrevDisplay();
 		nextDisplay.setDisplay(nextTet);
 		heldDisplay = new JPrevDisplay();
 	}
@@ -52,22 +52,40 @@ public class JTBoard extends Texture { //Manages game and point system
 		
 	}
 	public void switchFocus() throws OutOfGridException, NullBlockException {
+		
 		prevTet.add(currentTet); //Adds old tetromino to array	
 		currentTet = nextTet;
 		nextTet = nextTet(); //nextTet gets random tetromino
 		nextDisplay.setDisplay(nextTet);
 	}
-	
+	public Tetromino queryTetType(Tetromino tet) throws OutOfGridException, NullBlockException {
+		if(tet instanceof ITetromino)
+			return new ITetromino(jtg);
+		else if(tet instanceof JTetromino)
+			return new JTetromino(jtg);
+		else if(tet instanceof LTetromino)
+			return new LTetromino(jtg);
+		else if(tet instanceof OTetromino)
+			return new OTetromino(jtg);
+		else if(tet instanceof STetromino)
+			return new STetromino(jtg);
+		else if(tet instanceof TTetromino)
+			return new TTetromino(jtg);
+		else if(tet instanceof ZTetromino)
+			return new ZTetromino(jtg);
+		else
+			return null;
+		
+	}
 	public void switchHeld() throws OutOfGridException, NullBlockException {
 		Tetromino tempTet; 
 		if(heldTet == null) {
-			heldTet = currentTet;
-			heldDisplay.setDisplay(heldTet);
+			heldTet = queryTetType(currentTet);
+			currentTet.selfDestruct();
 			currentTet = nextTet;
-			nextTet = nextTet();
-			nextDisplay.setDisplay(nextTet);
+			heldDisplay.setDisplay(heldTet);
 		} else {
-			tempTet = currentTet;
+			tempTet = queryTetType(currentTet);
 			currentTet = heldTet;
 			heldTet = tempTet;
 			heldDisplay.setDisplay(heldTet);

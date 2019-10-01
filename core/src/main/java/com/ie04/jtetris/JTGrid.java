@@ -119,7 +119,7 @@ public class JTGrid {
 		}
 		return false;
 	}
-	private void deleteAtVector(Vector2i vec) throws OutOfGridException {
+	public void deleteAtVector(Vector2i vec) throws OutOfGridException {
 		
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();
@@ -217,7 +217,7 @@ public class JTGrid {
 			
 	}	
 	private boolean isLineEmpty(int line) throws OutOfGridException {
-		if(line > MAX_Y || line < MIN_XY)
+		if(line > MAX_Y || line < MIN_XY) //Only tests y values
 			throw new OutOfGridException();
 		
 		for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
@@ -226,7 +226,7 @@ public class JTGrid {
 		}
 		return true;
 	}
-	private void dropLine(int line) throws OutOfGridException, NullBlockException {
+	private void dropLine(int line) throws OutOfGridException, NullBlockException { //Drops line one unit
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
@@ -262,16 +262,16 @@ public class JTGrid {
 		for(int i = 0; i < 8; i++) {
 			if(isBlockAtVector(i, line)) {
 				getAtVector(i, line).destruct();
-				deleteAtVector(i, line);
+				deleteAtVector(i, line); 
 			}
 		}
 		
 	}
-	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles grid after line clearing
+	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles all 'floating' blocks
 		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
 			if(isLineEmpty(line) && !isLineEmpty(line-1)) {
-				dropLine(line-1);
-				line = 18;
+				dropLine(line-1); //Drops line before empty line
+				line = (int) (MAX_Y + 1); //Resets and rechecks
 			}
 		}
 	}

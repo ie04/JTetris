@@ -37,7 +37,7 @@ public class JTetris extends BasicGame {
 	    	if (inputTime > speed) { //delay in seconds 
 	    		jtb.currentTet.moveDown();
 	    		
-	    		if(jtb.currentTet.isGroundHit()) {
+	    		if(jtb.currentTet.isBottomHit()) {
 	    			jtb.jtg.cleaveComplete();
 	    			speed = 0.3; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino

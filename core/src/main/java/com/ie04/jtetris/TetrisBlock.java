@@ -194,7 +194,7 @@ public class TetrisBlock extends Sprite implements Animate {
 		else
 			return true;
 	}
-	public void destruct() {
+	public void destruct() throws OutOfGridException {
 		this.tet.deleteBlock(this);
 	}
 	public TetrisBlock getNext() {

@@ -1,6 +1,9 @@
 package com.ie04.jtetris.tetrominoes;
 
 import java.util.ArrayList;
+
+import javax.swing.text.Position;
+
 import org.mini2Dx.core.graphics.Graphics;
 import com.ie04.jtetris.Animate;
 import com.ie04.jtetris.Direction;
@@ -13,7 +16,7 @@ public abstract class Tetromino implements Animate{
 	
 	private static int numTetrominoes; //Amount of tetrominoes spawned on grid
 	protected static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
-	public int tetID; //Each tetromino recieves an ID to differentiate it from other blocks
+	public int tetID; //Each tetromino recieves an ID to differentiate its own blocks from others during collision checking
 	protected JTGrid jtg;
 	public ArrayList<TetrisBlock> blockArray; 
 	protected int currentState = 0; //State of figure used for rotation
@@ -57,9 +60,11 @@ public abstract class Tetromino implements Animate{
 	public abstract void rotate() throws NullBlockException, OutOfGridException;
 	protected abstract void wallKick() throws NullBlockException, OutOfGridException;
 	
-	public void deleteBlock(TetrisBlock block) {
-		if(blockArray.contains(block))
+	public void deleteBlock(TetrisBlock block) throws OutOfGridException {
+		if(blockArray.contains(block)) {
 			blockArray.remove(block);
+			jtg.deleteAtVector(block.getPosition());
+		}
 	}
 	public void render(Graphics g) {
 		
@@ -90,7 +95,7 @@ public abstract class Tetromino implements Animate{
 	}
 	public void moveDown() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < blockArray.size(); i++) {
+		for(int i = 0; i < blockArray.size(); i++) { //Tests individual blocks for collision
 			if(jtg.queryCollision(blockArray.get(i), Direction.DOWN)) {
 				blockArray.get(i).bottomHit(true);
 				bottomHit = true;
@@ -103,7 +108,7 @@ public abstract class Tetromino implements Animate{
 	}
 	public void moveLeft() throws NullBlockException, OutOfGridException {
 		boolean areAnyHit = false;
-		for(int i = 0; i < blockArray.size(); i++) {
+		for(int i = 0; i < blockArray.size(); i++) { 
 			if(jtg.queryCollision(blockArray.get(i), Direction.LEFT)) {
 				blockArray.get(i).leftHit(true);
 				leftHit = true;
@@ -142,6 +147,10 @@ public abstract class Tetromino implements Animate{
 			blockArray.get(i).moveRight();
 		}
 	}
+	public void selfDestruct() throws OutOfGridException {
+		for(int i = 0; i < blockArray.size(); i++)
+			deleteBlock(blockArray.get(i));
+	}
 	/**
 	 * @return the topHit
 	 */
@@ -157,7 +166,7 @@ public abstract class Tetromino implements Animate{
 	/**
 	 * @return the groundHit
 	 */
-	public boolean isGroundHit() {
+	public boolean isBottomHit() {
 		return bottomHit;
 	}
 	/**
