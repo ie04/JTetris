@@ -114,8 +114,9 @@ public abstract class Tetromino implements Animate{
 				leftHit = true;
 			}	
 		}
+		
 		for(int i = 0; i < blockArray.size(); i++) {
-			areAnyHit = blockArray.get(i).isLeftHit() ? true : false;
+			areAnyHit = blockArray.get(i).isLeftHit();
 			if(areAnyHit)
 				break;
 		}
@@ -148,8 +149,11 @@ public abstract class Tetromino implements Animate{
 		}
 	}
 	public void selfDestruct() throws OutOfGridException {
+		
 		for(int i = 0; i < blockArray.size(); i++)
-			deleteBlock(blockArray.get(i));
+			jtg.deleteAtVector(blockArray.get(i).getPosition());
+		
+		blockArray.clear();
 	}
 	/**
 	 * @return the topHit

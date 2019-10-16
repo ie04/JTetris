@@ -262,7 +262,6 @@ public class JTGrid {
 		for(int i = 0; i < 8; i++) {
 			if(isBlockAtVector(i, line)) {
 				getAtVector(i, line).destruct();
-				deleteAtVector(i, line); 
 			}
 		}
 		
@@ -271,7 +270,7 @@ public class JTGrid {
 		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
 			if(isLineEmpty(line) && !isLineEmpty(line-1)) {
 				dropLine(line-1); //Drops line before empty line
-				line = (int) (MAX_Y + 1); //Resets and rechecks
+				line = 18; //Resets and rechecks
 			}
 		}
 	}

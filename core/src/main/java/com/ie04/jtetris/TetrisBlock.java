@@ -102,7 +102,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	
 	public void bottomHit(boolean is) {
 		if(is) {
-			if(!bottomHit) {
+			if(!bottomHit) { //If I wasn't bottomHit before make me and send this message to my members
 				
 				bottomHit = true;
 				
@@ -161,7 +161,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	public void rightHit(boolean is) {
 		if(is) {
-			if(!rightHit) {
+			if(!rightHit) { 
 					
 				rightHit = true;
 					
@@ -189,7 +189,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	public boolean isBlockForeign(TetrisBlock block) {
 		
-		if(block == null || block.getTetID() == this.getTetID())
+		if(block == null || block.getTetID() == this.getTetID()) //If there is no block or block is part of my tetromino
 			return false;
 		else
 			return true;

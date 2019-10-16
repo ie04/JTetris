@@ -79,13 +79,15 @@ public class JTBoard extends Texture { //Manages game and point system
 	}
 	public void switchHeld() throws OutOfGridException, NullBlockException {
 		Tetromino tempTet; 
+		 //Destroys currentTet blocks
 		if(heldTet == null) {
-			heldTet = queryTetType(currentTet);
+			heldTet = queryTetType(currentTet); //Returns new instance of currentTet class
 			currentTet.selfDestruct();
 			currentTet = nextTet;
 			heldDisplay.setDisplay(heldTet);
 		} else {
 			tempTet = queryTetType(currentTet);
+			currentTet.selfDestruct();
 			currentTet = heldTet;
 			heldTet = tempTet;
 			heldDisplay.setDisplay(heldTet);
