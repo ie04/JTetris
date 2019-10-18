@@ -1,9 +1,6 @@
 package com.ie04.jtetris.tetrominoes;
 
 import java.util.ArrayList;
-
-import javax.swing.text.Position;
-
 import org.mini2Dx.core.graphics.Graphics;
 import com.ie04.jtetris.Animate;
 import com.ie04.jtetris.Direction;

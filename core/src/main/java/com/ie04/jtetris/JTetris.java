@@ -4,14 +4,13 @@ import org.mini2Dx.core.game.BasicGame;
 import org.mini2Dx.core.graphics.Graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.ie04.jtetris.tetrominoes.Tetromino;
 
 public class JTetris extends BasicGame {
 	public static final String GAME_IDENTIFIER = "com.ie04.jtetris";
 
 	private JTBoard jtb; //Board containing tetris grid, score, etc.
 	public static float inputTime = 0; //Records game time, used for setting update speed
-	public static double speed = 0.3; //Updates if inputTime equals this value
+	public static double speed = 0.5; //Updates if inputTime equals this value
 	
 	@Override
     public void initialise() {
@@ -39,7 +38,7 @@ public class JTetris extends BasicGame {
 	    		
 	    		if(jtb.currentTet.isBottomHit()) {
 	    			jtb.jtg.cleaveComplete();
-	    			speed = 0.3; //Resets speed if down was hit
+	    			speed = 0.5; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino
 	    			
 	    		}

@@ -38,7 +38,7 @@ public class JTBoard extends Texture { //Manages game and point system
  			tet.render(g);
  	}
 	public Tetromino nextTet() throws OutOfGridException, NullBlockException { //Picks random tetromino from pool of 7
-		int selection = (int)(Math.random() * 7 + 1);
+		int selection = 1; //(int)(Math.random() * 7 + 1);
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
 		case 2: return new JTetromino(jtg);
