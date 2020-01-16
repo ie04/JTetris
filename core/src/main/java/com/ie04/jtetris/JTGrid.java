@@ -42,22 +42,22 @@ public class JTGrid {
 	}
 
 
-	private boolean doesVectorExceedBounds(Vector2i vec) {
+	private boolean doesVectorExceedBounds(Vector2i vec) { 
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.y < MIN_XY)
 			return true;
 		else
 			return false;
 	}
-	private void setAtVector(Vector2i vec, TetrisBlock block) throws OutOfGridException {
+	private void setAtVector(Vector2i vec, TetrisBlock block) throws OutOfGridException { //sets block at explicit vector with bounds check
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();
 		
 		tetGrid[vec.y][vec.x] = block;
 	}
-	private void setAtVector(TetrisBlock block) throws OutOfGridException {
+	private void setAtVector(TetrisBlock block) throws OutOfGridException { //sets at implicit vector
 		setAtVector(block.getPosition(), block);
 	}
-	public TetrisBlock getAtVector(Vector2i vec) throws OutOfGridException {
+	public TetrisBlock getAtVector(Vector2i vec) throws OutOfGridException { //gets 
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();
 		
@@ -73,7 +73,7 @@ public class JTGrid {
 		return getAtVector(block.getPosition().x + xOffset, block.getPosition().y + yOffset);
 	}
 	public TetrisBlock getRelativeToBlock(TetrisBlock block, Direction direction) throws OutOfGridException {
-		switch(direction) {
+		switch(direction) { 
 		case UP: return getRelativeToBlock(block, 0, -1);
 		case DOWN: return getRelativeToBlock(block, 0, 1);
 		case LEFT: return getRelativeToBlock(block, -1, 0);
@@ -104,7 +104,7 @@ public class JTGrid {
 		}
 	}
 	public boolean isForeignBlockAdjacent(TetrisBlock block, Direction direction) throws OutOfGridException {
-		switch(direction) {
+		switch(direction) { //Checks if nonmember is adjacent, for collision purposes
 		case DOWN:
 			if(block.isBlockForeign(getRelativeToBlock(block, Direction.DOWN))) return true; else return false;
 		case LEFT:
@@ -119,7 +119,7 @@ public class JTGrid {
 		}
 		return false;
 	}
-	public void deleteAtVector(Vector2i vec) throws OutOfGridException {
+	public void deleteAtVector(Vector2i vec) throws OutOfGridException { //Safe vector deletion
 		
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();

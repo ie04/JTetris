@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.mini2Dx.core.graphics.Graphics;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ie04.jtetris.tetrominoes.*;
 
 public class JTBoard extends Texture { //Manages game and point system
@@ -17,7 +18,6 @@ public class JTBoard extends Texture { //Manages game and point system
 	public Tetromino heldTet; //Tetromino in hold
 	public JPrevDisplay nextDisplay;
 	public JPrevDisplay heldDisplay;
-	
  	public JTBoard() throws OutOfGridException, NullBlockException {
 		super("JTetrisBG.png");
 		jtg = new JTGrid();
@@ -29,16 +29,15 @@ public class JTBoard extends Texture { //Manages game and point system
 		heldDisplay = new JPrevDisplay();
 	}
  	public void render(Graphics g) {
- 		
  		g.drawTexture(this, 0f, 0f);
- 		nextDisplay.render(g, 210, 99);
- 		heldDisplay.render(g, 200, 200);
+ 		nextDisplay.render(g, 213, 230);
+ 		heldDisplay.render(g, 213, 307);
  		currentTet.render(g);
  		for(Tetromino tet : prevTet) //Renders all previous tetrominoes
  			tet.render(g);
  	}
 	public Tetromino nextTet() throws OutOfGridException, NullBlockException { //Picks random tetromino from pool of 7
-		int selection = 1; //(int)(Math.random() * 7 + 1);
+		int selection = (int)(Math.random() * 7 + 1);
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
 		case 2: return new JTetromino(jtg);
@@ -58,7 +57,7 @@ public class JTBoard extends Texture { //Manages game and point system
 		nextTet = nextTet(); //nextTet gets random tetromino
 		nextDisplay.setDisplay(nextTet);
 	}
-	public Tetromino queryTetType(Tetromino tet) throws OutOfGridException, NullBlockException {
+	public Tetromino queryTetType(Tetromino tet) throws OutOfGridException, NullBlockException { //Returns new tet object based on given tet
 		if(tet instanceof ITetromino)
 			return new ITetromino(jtg);
 		else if(tet instanceof JTetromino)
@@ -80,12 +79,16 @@ public class JTBoard extends Texture { //Manages game and point system
 	public void switchHeld() throws OutOfGridException, NullBlockException {
 		Tetromino tempTet; 
 		 //Destroys currentTet blocks
-		if(heldTet == null) {
-			heldTet = queryTetType(currentTet); //Returns new instance of currentTet class
+		if(heldTet == null) { //If the held buffer is empty tetromino is received from nexTet
+			
+			heldTet = queryTetType(currentTet); //Returns new instance of currentTet's class
 			currentTet.selfDestruct();
 			currentTet = nextTet;
+			nextTet = nextTet();
 			heldDisplay.setDisplay(heldTet);
-		} else {
+			nextDisplay.setDisplay(nextTet);
+			
+		} else { //CurrentTet and heldTet swap
 			tempTet = queryTetType(currentTet);
 			currentTet.selfDestruct();
 			currentTet = heldTet;

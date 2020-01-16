@@ -10,7 +10,7 @@ public class JTetris extends BasicGame {
 
 	private JTBoard jtb; //Board containing tetris grid, score, etc.
 	public static float inputTime = 0; //Records game time, used for setting update speed
-	public static double speed = 0.5; //Updates if inputTime equals this value
+	public static double speed = 0.3; //Updates if inputTime equals this value
 	
 	@Override
     public void initialise() {
@@ -33,12 +33,12 @@ public class JTetris extends BasicGame {
     	inputTime += delta;
 	    try {
 	    	
-	    	if (inputTime > speed) { //delay in seconds 
+	    	if (inputTime > speed) { //speed represents how many seconds to wait before a frame update 
 	    		jtb.currentTet.moveDown();
 	    		
 	    		if(jtb.currentTet.isBottomHit()) {
 	    			jtb.jtg.cleaveComplete();
-	    			speed = 0.5; //Resets speed if down was hit
+	    			speed = 0.3; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino
 	    			
 	    		}
@@ -57,7 +57,7 @@ public class JTetris extends BasicGame {
 	    		jtb.currentTet.moveRight();
 	    	
 	    	if(downArrowPressed)
-	    		speed = 0;
+	    		speed = 0; //speeds up tetrominos by not delaying frame updates
 	    	
 	    	if(upArrowPressed)
 	    		jtb.currentTet.rotate(); //Rotates clockwise

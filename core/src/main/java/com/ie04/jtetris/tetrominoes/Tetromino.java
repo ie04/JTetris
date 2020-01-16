@@ -128,24 +128,27 @@ public abstract class Tetromino implements Animate{
 			blockArray.get(i).moveLeft();
 			
 		}
-		if(rightHit)
-			rightHit = false;
+//		if(rightHit)
+//			rightHit = false;
 		
 	}
 	public void moveRight() throws NullBlockException, OutOfGridException {
 		
-		for(int i = 0; i < blockArray.size(); i++) {
-			if(jtg.queryCollision(blockArray.get(i), Direction.RIGHT)) {
-				blockArray.get(i).rightHit(true);
-				rightHit = true;
-			}
-		}
 		
+		queryCollision(Direction.RIGHT);
 		for(int i = 0; i < blockArray.size(); i++) {	
 			blockArray.get(i).moveRight();
 		}
 	}
-	public void selfDestruct() throws OutOfGridException {
+	public void queryCollision(Direction direction) throws OutOfGridException {
+		for(int i = 0; i < blockArray.size(); i++) {
+			if(jtg.queryCollision(blockArray.get(i), direction)) {
+				blockArray.get(i).rightHit(true);
+				rightHit = true;
+			}
+		}
+	}
+	public void selfDestruct() throws OutOfGridException { //Deletes tetromino from grid
 		
 		for(int i = 0; i < blockArray.size(); i++)
 			jtg.deleteAtVector(blockArray.get(i).getPosition());

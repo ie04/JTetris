@@ -3,19 +3,18 @@ package com.ie04.jtetris;
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ie04.jtetris.tetrominoes.*;
 
-public class JPrevDisplay extends Sprite{
-
-	public JPrevDisplay() {
-	}
+public class JPrevDisplay extends Sprite{ //Tetromino preview used for hold and next windows
 	
 	public void render(Graphics g, int xPos, int yPos) {
 		if(this.getTexture() != null)
-			g.drawTexture(this.getTexture(), xPos, yPos);
+			g.drawTexture(this.getTexture(), xPos, yPos);		
 	}
-	public void setDisplay(Tetromino tet) {
+	public void setDisplay(Tetromino tet) { //Sets image based on tetromino fed
 		if(tet instanceof ITetromino)
 			this.setTexture(new Texture("ITetPrev.png"));
 		else if(tet instanceof JTetromino)

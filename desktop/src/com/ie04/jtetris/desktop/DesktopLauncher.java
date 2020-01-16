@@ -14,6 +14,5 @@ public class DesktopLauncher {
 		config.vSyncEnabled = true;
 		new DesktopMini2DxGame(new JTetris(), config);
 		
-		
 	}
 }
