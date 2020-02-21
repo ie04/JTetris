@@ -11,6 +11,9 @@ public class JTetris extends BasicGame {
 	private JTBoard jtb; //Board containing tetris grid, score, etc.
 	public static float inputTime = 0; //Records game time, used for setting update speed
 	public static double speed = 0.3; //Updates if inputTime equals this value
+	public JNumDisplay font;
+	
+	
 	
 	@Override
     public void initialise() {
@@ -21,6 +24,7 @@ public class JTetris extends BasicGame {
 		} catch (NullBlockException e) {
 			e.printStackTrace();
 		}  
+    	
     }
     
     @Override
@@ -37,7 +41,7 @@ public class JTetris extends BasicGame {
 	    		jtb.currentTet.moveDown();
 	    		
 	    		if(jtb.currentTet.isBottomHit()) {
-	    			jtb.jtg.cleaveComplete();
+	    			jtb.queryPointsGained(jtb.jtg.cleaveComplete());
 	    			speed = 0.3; //Resets speed if down was hit
 	    			jtb.switchFocus(); //Switches focus to new random tetromino
 	    			
@@ -62,7 +66,7 @@ public class JTetris extends BasicGame {
 	    	if(upArrowPressed)
 	    		jtb.currentTet.rotate(); //Rotates clockwise
 	    	
-	    	if(heldPressed) {
+	    	if(heldPressed) { //Switches hold register with current tetromino
 	    		jtb.switchHeld();
 	    	}
 	    	}catch(NullBlockException e) { e.printStackTrace(); System.exit(0);}
@@ -73,9 +77,7 @@ public class JTetris extends BasicGame {
     public void interpolate(float alpha) {}
     
     @Override
-    public void render(Graphics g) {
-    	
-	jtb.render(g);	
-	
+    public void render(Graphics g) { 
+    	jtb.render(g);	//Renders all JTBoard objects
     }
 }

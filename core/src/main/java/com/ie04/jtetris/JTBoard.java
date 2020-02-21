@@ -11,13 +11,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ie04.jtetris.tetrominoes.*;
 
 public class JTBoard extends Texture { //Manages game and point system
-	public JTGrid jtg;
-	public Tetromino currentTet;
-	public Tetromino nextTet;
+	public JTGrid jtg; //grid manager
+	public Tetromino currentTet; //current user-controlled tetromino
+	public Tetromino nextTet; //randomly generated next tetromino
 	public ArrayList<Tetromino> prevTet; //Dynamically increasing array of all previous terominoes
-	public Tetromino heldTet; //Tetromino in hold
-	public JPrevDisplay nextDisplay;
-	public JPrevDisplay heldDisplay;
+	public Tetromino heldTet; //Tetromino in hold buffer
+	public JPrevDisplay nextDisplay; //displays nextTet
+	public JPrevDisplay heldDisplay; 
+	public JNumDisplay scoreDisplay;
+	private int currentLevel = 1;
+	
  	public JTBoard() throws OutOfGridException, NullBlockException {
 		super("JTetrisBG.png");
 		jtg = new JTGrid();
@@ -25,19 +28,21 @@ public class JTBoard extends Texture { //Manages game and point system
 		nextTet = nextTet();
 		prevTet = new ArrayList<Tetromino>(); 
 		nextDisplay= new JPrevDisplay();
-		nextDisplay.setDisplay(nextTet);
+		nextDisplay.setDisplay(nextTet); //displays tetromino at nextTet
 		heldDisplay = new JPrevDisplay();
+		scoreDisplay = new JNumDisplay(236, 115);
 	}
  	public void render(Graphics g) {
  		g.drawTexture(this, 0f, 0f);
  		nextDisplay.render(g, 213, 230);
  		heldDisplay.render(g, 213, 307);
  		currentTet.render(g);
+ 		scoreDisplay.render(g);
  		for(Tetromino tet : prevTet) //Renders all previous tetrominoes
  			tet.render(g);
  	}
-	public Tetromino nextTet() throws OutOfGridException, NullBlockException { //Picks random tetromino from pool of 7
-		int selection = (int)(Math.random() * 7 + 1);
+	public Tetromino nextTet() throws OutOfGridException, NullBlockException { 
+		int selection = (int)(Math.random() * 7 + 1); //Picks random tetromino from pool of 7
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
 		case 2: return new JTetromino(jtg);
@@ -94,6 +99,19 @@ public class JTBoard extends Texture { //Manages game and point system
 			currentTet = heldTet;
 			heldTet = tempTet;
 			heldDisplay.setDisplay(heldTet);
+		}
+	}
+	public void queryPointsGained(int linesComplete) {
+		switch(linesComplete) {
+		case 1: scoreDisplay.addToNum(40   *  currentLevel);
+				break;
+		case 2: scoreDisplay.addToNum(100  *  currentLevel);
+				break;
+		case 3: scoreDisplay.addToNum(300  *  currentLevel);
+				break;
+		case 4: scoreDisplay.addToNum(1200 *  currentLevel);
+				break;
+		default: return;
 		}
 	}
 }
