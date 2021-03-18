@@ -2,10 +2,7 @@ package com.ie04.jtetris;
 
 import org.mini2Dx.core.graphics.Graphics;
 import org.mini2Dx.core.graphics.Sprite;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ie04.jtetris.tetrominoes.*;
 
 public class JPrevDisplay extends Sprite{ //Tetromino preview used for hold and next windows

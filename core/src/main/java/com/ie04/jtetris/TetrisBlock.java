@@ -37,9 +37,7 @@ public class TetrisBlock extends Sprite implements Animate {
 	}
 	public void moveUp() throws NullBlockException, OutOfGridException { //Used for wallKick() and to satisfy Animate
 		if(!topHit) {		
-			jtg.updateBlock(this, Direction.UP);
-			
-			
+			jtg.updateBlock(this, Direction.UP);	
 		}
 	}
 	@Override
@@ -62,7 +60,6 @@ public class TetrisBlock extends Sprite implements Animate {
 		
 		if(!leftHit && !bottomHit) {
 			jtg.updateBlock(this, Direction.LEFT);
-			
 		}
 		
 		if(rightHit)
@@ -187,7 +184,7 @@ public class TetrisBlock extends Sprite implements Animate {
 				}
 		}
 	}
-	public boolean isBlockForeign(TetrisBlock block) {
+	public boolean isBlockForeign(TetrisBlock block) { //Checks if a block is not a member of the given block's tetromino
 		
 		if(block == null || block.getTetID() == this.getTetID()) //If there is no block or block is part of my tetromino
 			return false;

@@ -5,9 +5,7 @@ package com.ie04.jtetris;
 import java.util.ArrayList;
 
 import org.mini2Dx.core.graphics.Graphics;
-
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ie04.jtetris.tetrominoes.*;
 
 public class JTBoard extends Texture { //Manages game and point system
@@ -42,7 +40,7 @@ public class JTBoard extends Texture { //Manages game and point system
  			tet.render(g);
  	}
 	public Tetromino nextTet() throws OutOfGridException, NullBlockException { 
-		int selection = (int)(Math.random() * 7 + 1); //Picks random tetromino from pool of 7
+		int selection = (int)(Math.random() * 6 + 1); //Picks random tetromino from pool of 7
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
 		case 2: return new JTetromino(jtg);
@@ -82,6 +80,7 @@ public class JTBoard extends Texture { //Manages game and point system
 		
 	}
 	public void switchHeld() throws OutOfGridException, NullBlockException {
+		/* Switches current tetromino with one in held buffer*/
 		Tetromino tempTet; 
 		 //Destroys currentTet blocks
 		if(heldTet == null) { //If the held buffer is empty tetromino is received from nexTet

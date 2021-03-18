@@ -23,7 +23,7 @@ public class ITetromino extends Tetromino {
 	
 	@Override
 	public void rotate() throws NullBlockException, OutOfGridException {
-		if(bottomHit)
+		if(bottomHit || this.blockArray.get(0).getPosition().y == 0)
 			return;
 		wallKick();
 		if(currentState == 0) {

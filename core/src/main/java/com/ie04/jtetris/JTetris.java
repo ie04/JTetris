@@ -13,8 +13,6 @@ public class JTetris extends BasicGame {
 	public static double speed = 0.3; //Updates if inputTime equals this value
 	public JNumDisplay font;
 	
-	
-	
 	@Override
     public void initialise() {
     	try {

@@ -82,6 +82,7 @@ public class JTGrid {
 		}
 	}
 	public void setRelativeToBlock(TetrisBlock setblock, TetrisBlock relBlock, int xOffset, int yOffset) throws OutOfGridException, NullBlockException {
+		/*Sets block a certain amount of blocks relative to selected blocks*/
 		updateBlock(setblock, new Vector2i(relBlock.getPosition().x + xOffset, relBlock.getPosition().y + yOffset));	
 	}
 	public void setRelativeToBlock(TetrisBlock setBlock, TetrisBlock relBlock, Direction direction) throws OutOfGridException, NullBlockException {
@@ -127,7 +128,7 @@ public class JTGrid {
 		tetGrid[vec.y][vec.x] = null;
 		
 	}
-	public void deleteAtVector(int x, int y) throws OutOfGridException {
+	public void deleteAtVector(int x, int y) throws OutOfGridException { //compacts x and y into vector
 		deleteAtVector(new Vector2i(x,y));
 	}
 	
@@ -226,7 +227,7 @@ public class JTGrid {
 		}
 		return true;
 	}
-	private void dropLine(int line) throws OutOfGridException, NullBlockException { //Drops line one unit
+	private void dropLine(int line) throws OutOfGridException, NullBlockException { //Drops line one level
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
@@ -237,7 +238,7 @@ public class JTGrid {
 	}
 	public int cleaveComplete() throws OutOfGridException, NullBlockException { //Cleaves completed lines
 		int blocksInLine = 0;
-		int linesCleared = 0;
+		int linesCleared = 0; 
 			for(int line = (int) MAX_Y; line > MIN_XY; line--) {
 				
 					for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) { //checks block before test
@@ -246,31 +247,31 @@ public class JTGrid {
 							
 					}
 					
-					if(blocksInLine == 8) {
+					if(blocksInLine == 8) { //If array is full (from 1)
 						cleaveLine(line);
-						linesCleared++;
+						linesCleared++; 
 					}
 					blocksInLine = 0;
 			}
 			settleGrid();
-			return linesCleared;
+			return linesCleared; //For use in point system
 	}
 	private void cleaveLine(int line) throws OutOfGridException { //Deletes selected line
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
-		for(int i = 0; i < 8; i++) {
+		for(int i = 0; i <= MAX_X; i++) { //Tests all blocks on x axis
 			if(isBlockAtVector(i, line)) {
 				getAtVector(i, line).destruct();
 			}
 		}
 		
 	}
-	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles all 'floating' blocks
-		for(int line = (int) MAX_Y; line > MIN_XY; line--) {
-			if(isLineEmpty(line) && !isLineEmpty(line-1)) {
+	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles all 'floating' blocks above cleared line
+		for(int line = (int) MAX_Y; line > MIN_XY; line--) { //Starts from the bottom and moves up
+			if(isLineEmpty(line) && !isLineEmpty(line-1)) { //tests if nonempty line has an empty line under it
 				dropLine(line-1); //Drops line before empty line
-				line = 18; //Resets and rechecks
+				settleGrid(); //Resets and rechecks
 			}
 		}
 	}
