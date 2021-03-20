@@ -67,7 +67,15 @@ public class JTetromino extends Tetromino {
 
 	@Override
 	protected void wallKick() throws NullBlockException, OutOfGridException {
-		
+		if(currentState == 0 && blockArray.get(1).getPosition().y == 0) {
+			//moveDown();
+		}
+		if(currentState == 1 && blockArray.get(1).getPosition().x == 7) {
+			moveLeft();
+		}
+		if(currentState == 3 && blockArray.get(1).getPosition().x == 0) {
+			moveRight();
+		}
 		
 	}
 

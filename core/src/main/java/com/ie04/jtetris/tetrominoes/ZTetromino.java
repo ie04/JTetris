@@ -51,9 +51,13 @@ public class ZTetromino extends Tetromino {
 	}
 
 	@Override
-	protected void wallKick() {
-		// TODO Auto-generated method stub
-		
+	protected void wallKick() throws NullBlockException, OutOfGridException {
+		if(currentState == 0 && blockArray.get(2).getPosition().y == 0) {
+			moveDown();
+		}
+		if(currentState == 1 && blockArray.get(2).getPosition().x == 7) {
+			moveLeft();
+		}
 	}
 
 }

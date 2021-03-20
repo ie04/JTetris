@@ -13,9 +13,9 @@ public class JTGrid {
 	public static final float RIGHT_EXTREME = 121;
 	public static final float TOP_EXTREME = 21;
 	public static final float BLOCK_WIDTH = 20; //Block width in pixels
-	public static final float MAX_Y = 17; //Excludes 0
-	public static final float MAX_X = 7;
-	public static final float MIN_XY = 0; //Both 0
+	public static final int MAX_Y = 17; //Excludes 0
+	public static final int MAX_X = 7;
+	public static final int MIN_XY = 0; //Both 0
 	private boolean wallHit = false;
 	private TetrisBlock[][] tetGrid;
 	
@@ -42,7 +42,7 @@ public class JTGrid {
 	}
 
 
-	private boolean doesVectorExceedBounds(Vector2i vec) { 
+	private boolean doesVectorExceedBounds(Vector2i vec) { //Tests if vector exceeds the boundaries of the grid
 		if(vec.x > MAX_X || vec.x < MIN_XY || vec.y > MAX_Y || vec.y < MIN_XY)
 			return true;
 		else
@@ -57,7 +57,7 @@ public class JTGrid {
 	private void setAtVector(TetrisBlock block) throws OutOfGridException { //sets at implicit vector
 		setAtVector(block.getPosition(), block);
 	}
-	public TetrisBlock getAtVector(Vector2i vec) throws OutOfGridException { //gets 
+	public TetrisBlock getAtVector(Vector2i vec) throws OutOfGridException {
 		if(doesVectorExceedBounds(vec))
 			throw new OutOfGridException();
 		
@@ -68,7 +68,7 @@ public class JTGrid {
 	}
 	public TetrisBlock getRelativeToBlock(TetrisBlock block, int xOffset, int yOffset) throws OutOfGridException {
 		if( block.getPosition().x + xOffset < 0 || block.getPosition().y + yOffset < 0)
-			return block; //If offset is greater than bounds, return itself
+			return block; //If offset is greater than bounds, return itself (removes crash from moving along bounds)
 		
 		return getAtVector(block.getPosition().x + xOffset, block.getPosition().y + yOffset);
 	}
@@ -217,31 +217,33 @@ public class JTGrid {
 				
 			
 	}	
-	private boolean isLineEmpty(int line) throws OutOfGridException {
-		if(line > MAX_Y || line < MIN_XY) //Only tests y values
+	private boolean isLineEmpty(int line) throws OutOfGridException { //Tests if line contains no blocks
+		if(line > MAX_Y || line < MIN_XY) //Only tests y values 
 			throw new OutOfGridException();
 		
-		for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
+		for(int atBlock = MIN_XY; atBlock < MAX_Y; ++atBlock) {
 			if(isBlockAtVector(atBlock, line))
-				return false;
+				return false; //If a block is found immediately return false
 		}
 		return true;
 	}
+	
 	private void dropLine(int line) throws OutOfGridException, NullBlockException { //Drops line one level
 		if(line > MAX_Y || line < MIN_XY)
 			throw new OutOfGridException();
 		
-		for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) {
-			if(isBlockAtVector(atBlock, line))
-				updateBlock(getAtVector(atBlock, line), Direction.DOWN);
+		for(int atBlock = MIN_XY; atBlock < MAX_Y; ++atBlock) {
+			if(isBlockAtVector(atBlock, line))//If there is a block at the grid position
+				updateBlock(getAtVector(atBlock, line), Direction.DOWN); //Move that block down a level
 		}
 	}
-	public int cleaveComplete() throws OutOfGridException, NullBlockException { //Cleaves completed lines
+	
+	public int cleaveComplete() throws OutOfGridException, NullBlockException { //Removes completed lines
 		int blocksInLine = 0;
 		int linesCleared = 0; 
-			for(int line = (int) MAX_Y; line > MIN_XY; line--) {
+			for(int line = MAX_Y; line > MIN_XY; line--) {
 				
-					for(int atBlock = (int) MIN_XY; atBlock < MAX_Y; ++atBlock) { //checks block before test
+					for(int atBlock = MIN_XY; atBlock < MAX_Y; ++atBlock) { //checks block before test
 						if(isBlockAtVector(atBlock, line))
 							blocksInLine++;
 							
@@ -268,7 +270,7 @@ public class JTGrid {
 		
 	}
 	private void settleGrid() throws OutOfGridException, NullBlockException { //Settles all 'floating' blocks above cleared line
-		for(int line = (int) MAX_Y; line > MIN_XY; line--) { //Starts from the bottom and moves up
+		for(int line = MAX_Y; line > MIN_XY; line--) { //Starts from the bottom and moves up
 			if(isLineEmpty(line) && !isLineEmpty(line-1)) { //tests if nonempty line has an empty line under it
 				dropLine(line-1); //Drops line before empty line
 				settleGrid(); //Resets and rechecks

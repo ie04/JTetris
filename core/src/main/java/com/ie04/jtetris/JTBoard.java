@@ -15,9 +15,9 @@ public class JTBoard extends Texture { //Manages game and point system
 	public ArrayList<Tetromino> prevTet; //Dynamically increasing array of all previous terominoes
 	public Tetromino heldTet; //Tetromino in hold buffer
 	public JPrevDisplay nextDisplay; //displays nextTet
-	public JPrevDisplay heldDisplay; 
-	public JNumDisplay scoreDisplay;
-	private int currentLevel = 1;
+	public JPrevDisplay heldDisplay; //Displays tetromino in held buffer
+	public JNumDisplay scoreDisplay; //Displays score
+	private int currentLevel = 1; //Displays level (based on point threshold)
 	
  	public JTBoard() throws OutOfGridException, NullBlockException {
 		super("JTetrisBG.png");
@@ -28,7 +28,7 @@ public class JTBoard extends Texture { //Manages game and point system
 		nextDisplay= new JPrevDisplay();
 		nextDisplay.setDisplay(nextTet); //displays tetromino at nextTet
 		heldDisplay = new JPrevDisplay();
-		scoreDisplay = new JNumDisplay(236, 115);
+		scoreDisplay = new JNumDisplay(236, 115); //Displays score at specified position in board
 	}
  	public void render(Graphics g) {
  		g.drawTexture(this, 0f, 0f);
@@ -40,7 +40,7 @@ public class JTBoard extends Texture { //Manages game and point system
  			tet.render(g);
  	}
 	public Tetromino nextTet() throws OutOfGridException, NullBlockException { 
-		int selection = (int)(Math.random() * 6 + 1); //Picks random tetromino from pool of 7
+		int selection = (int)(Math.random() * 7 + 1); //Picks random tetromino from pool of 7
 		switch(selection) {
 		case 1: return new ITetromino(jtg);
 		case 2: return new JTetromino(jtg);
@@ -79,8 +79,8 @@ public class JTBoard extends Texture { //Manages game and point system
 			return null;
 		
 	}
-	public void switchHeld() throws OutOfGridException, NullBlockException {
-		/* Switches current tetromino with one in held buffer*/
+	public void switchHeld() throws OutOfGridException, NullBlockException { // Switches current tetromino with one in held buffer
+		
 		Tetromino tempTet; 
 		 //Destroys currentTet blocks
 		if(heldTet == null) { //If the held buffer is empty tetromino is received from nexTet
@@ -100,7 +100,7 @@ public class JTBoard extends Texture { //Manages game and point system
 			heldDisplay.setDisplay(heldTet);
 		}
 	}
-	public void queryPointsGained(int linesComplete) {
+	public void queryPointsGained(int linesComplete) { //Implements a point system based on how many lines are cleared in a row
 		switch(linesComplete) {
 		case 1: scoreDisplay.addToNum(40   *  currentLevel);
 				break;

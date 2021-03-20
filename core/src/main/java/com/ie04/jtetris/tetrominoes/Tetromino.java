@@ -15,7 +15,7 @@ public abstract class Tetromino implements Animate{
 	protected static int NUM_BLOCKS = 4; //All tetrominoes have 4 blocks
 	public int tetID; //Each tetromino recieves an ID to differentiate its own blocks from others during collision checking
 	protected JTGrid jtg;
-	public ArrayList<TetrisBlock> blockArray; 
+	public ArrayList<TetrisBlock> blockArray; //Array of tetromino blocks
 	protected int currentState = 0; //State of figure used for rotation
 	protected boolean topHit;
 	protected boolean bottomHit;
